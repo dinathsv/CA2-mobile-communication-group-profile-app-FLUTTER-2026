@@ -1,0 +1,32 @@
+name: nine
+description: A nine-member directory for the NDT Mobile Communication CA2 assignment.
+publish_to: none
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.12.0
+  flutter: ">=3.44.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  firebase_core: ^5.2.0
+  firebase_auth: ^7.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/members/member_01/
+    - assets/members/member_02/
+    - assets/members/member_03/
+    - assets/members/member_04/
+    - assets/members/member_05/
+    - assets/members/member_06/
+    - assets/members/member_07/
+    - assets/members/member_08/
+    - assets/members/member_09/
