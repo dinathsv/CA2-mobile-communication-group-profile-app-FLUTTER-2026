@@ -1,2 +1,97 @@
-# CA2-mobile-communication-group-profile-app-FLUTTER-2026
-NDT - mobile communication CA2
+# NINE.
+
+**Nine people. Nine identities.**
+
+NINE. is an Android member directory for the NDT Mobile Communication CA2 group assignment. It combines a shared sign-in and directory with nine profile screens owned by individual contributors.
+
+## Features and stack
+
+- Flutter and null-safe Dart with Material 3 and shared light and dark themes.
+- Firebase Core and Firebase Authentication for email/password sign-in, persistent sessions, and confirmed sign-out.
+- A searchable two-column directory, nine independent profiles, and portrait transitions that respect the system's reduced-motion setting.
+- A `StreamBuilder` for session changes and `setState` for the form, search, and theme.
+
+## Local setup
+
+Use Flutter 3.44 or later with Dart 3.12 or later, an Android device or emulator running API 24 or later, and an Android toolchain confirmed by `flutter doctor`. The foundation was created with Flutter 3.47.7.
+
+```sh
+flutter doctor
+flutter pub get
+```
+
+### Firebase setup for Android
+
+1. Create or select the group's project in the Firebase console. Enable **Authentication → Sign-in method → Email/Password**. Add a dedicated temporary assessment user under **Authentication → Users → Add user**. [Firebase password sign-in guide](https://firebase.google.com/docs/auth/flutter/password-auth)
+2. Install the Firebase CLI, sign in with a Google account that can configure the group project, and activate the FlutterFire CLI.
+
+   ```sh
+   firebase login
+   dart pub global activate flutterfire_cli
+   ```
+
+3. From the repository root, replace `YOUR_FIREBASE_PROJECT_ID` with the group's project ID and run the command below. Run `dart pub global run flutterfire_cli:flutterfire` in place of `flutterfire` if the pub cache's `bin` directory is outside your PATH. [FlutterFire setup guide](https://firebase.google.com/docs/flutter/setup)
+
+   ```sh
+   flutterfire configure --project=YOUR_FIREBASE_PROJECT_ID --platforms=android --android-package-name=lk.ndt.nine
+   ```
+
+4. Confirm that FlutterFire generated `lib/firebase_options.dart` and `android/app/google-services.json`. Android Gradle processes the JSON into the native resources used by `Firebase.initializeApp()`. Both generated files are local to each checkout. Assign the group leader to configure the shared project, or share the generated Android configuration privately with contributors who lack console access. [Android Firebase setup guide](https://firebase.google.com/docs/android/setup)
+5. Rebuild and sign in with the assessment account. The app displays a setup screen until valid Android Firebase configuration is present.
+
+| Assessment login | Placeholder |
+| --- | --- |
+| Email | `<assessment-email>` |
+| Password | `<share privately with the lecturer>` |
+
+Use a private GitHub repository and grant the lecturer access. Share the dedicated assessment credentials privately. Keep personal passwords, service-account credentials, and signing keys out of Git.
+
+## Run, test, and build
+
+```sh
+flutter devices
+flutter run
+
+dart format lib test
+flutter analyze
+flutter test
+
+flutter build apk --debug
+```
+
+The Dart and widget tests run without Firebase project configuration. Install the debug APK from `build/app/outputs/flutter-apk/app-debug.apk` for assessment or device testing.
+
+## Architecture
+
+| Path | Responsibility |
+| --- | --- |
+| `lib/main.dart`, `lib/app.dart` | Firebase startup, app shell, and theme state |
+| `lib/services/auth_service.dart` | Firebase adapter, validation, and user-facing sign-in errors |
+| `lib/features/auth/` | Login form, session gate, and the authenticated navigator |
+| `lib/features/home/`, `lib/data/member_registry.dart` | Searchable directory and profile-to-route mapping |
+| `lib/features/members/member_XX/`, `assets/members/member_XX/` | Each contributor's data, UI, and portrait |
+| `lib/models/`, `lib/core/`, `lib/widgets/` | Profile contract, theming, transitions, and shared widgets |
+
+Signing out removes the authenticated navigator and its route history. The native Firebase SDK restores the saved sign-in session when the app launches.
+
+## Member contributions
+
+| Member | Contributor | Design | Owned directories |
+| --- | --- | --- | --- |
+| 01 | Pending | MONO | `lib/features/members/member_01/`, `assets/members/member_01/` |
+| 02 | Pending | TERMINAL | `lib/features/members/member_02/`, `assets/members/member_02/` |
+| 03 | Pending | AURA | `lib/features/members/member_03/`, `assets/members/member_03/` |
+| 04 | Pending | ZEN | `lib/features/members/member_04/`, `assets/members/member_04/` |
+| 05 | Pending | BENTO | `lib/features/members/member_05/`, `assets/members/member_05/` |
+| 06 | Pending | VOGUE | `lib/features/members/member_06/`, `assets/members/member_06/` |
+| 07 | Pending | PULSE | `lib/features/members/member_07/`, `assets/members/member_07/` |
+| 08 | Pending | BRUTAL | `lib/features/members/member_08/`, `assets/members/member_08/` |
+| 09 | Pending | CINEMA | `lib/features/members/member_09/`, `assets/members/member_09/` |
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the member contract and Git workflow.
+
+## Screenshots
+
+| Sign-in | Directory | Member profile |
+| --- | --- | --- |
+| Add a configured Android screenshot | Add a light or dark directory screenshot | Add a finished profile screenshot |
