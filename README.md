@@ -61,6 +61,16 @@ flutter build apk --debug
 
 The Dart and widget tests run without Firebase project configuration. Install the debug APK from `build/app/outputs/flutter-apk/app-debug.apk` for assessment or device testing.
 
+### Run in Chrome
+
+Register or select a Web app in the same Firebase project. Save its Firebase SDK configuration as `firebase.web.json` in the project root. With the Firebase CLI and `jq` installed, replace `WEB_APP_ID` and `YOUR_PROJECT_ID` to download the configuration and run the app.
+
+```sh
+firebase apps:sdkconfig WEB WEB_APP_ID --project YOUR_PROJECT_ID --json \
+  | jq -e '.result.sdkConfig // .result' > firebase.web.json
+flutter run -d chrome --dart-define-from-file=firebase.web.json
+```
+
 ## Architecture
 
 | Path | Responsibility |

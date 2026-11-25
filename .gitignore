@@ -16,6 +16,7 @@ coverage/
 /lib/firebase_options.dart
 /android/app/google-services.json
 /firebase.json
+/firebase.web.json
 /.firebaserc
 .env
 .env.*

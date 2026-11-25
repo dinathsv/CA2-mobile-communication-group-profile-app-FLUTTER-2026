@@ -13,7 +13,7 @@ final member03Profile = MemberProfile(
   studentId: 'To be added',
   address: 'To be added',
   email: 'To be added',
-  photoAsset: 'assets/members/member_03/portrait.png',
+  photoAsset: 'assets/members/member_03/portrait.jpeg',
   qualifications: const [
     'Degree or diploma to be added',
     'Additional qualification to be added',

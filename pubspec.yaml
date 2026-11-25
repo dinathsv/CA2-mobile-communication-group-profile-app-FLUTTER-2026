@@ -21,6 +21,7 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
+    - assets/branding/sign-in-artwork.webp
     - assets/members/member_01/
     - assets/members/member_02/
     - assets/members/member_03/
