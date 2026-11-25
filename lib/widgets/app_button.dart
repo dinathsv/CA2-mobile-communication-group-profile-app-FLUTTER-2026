@@ -5,12 +5,14 @@ class AppButton extends StatelessWidget {
     super.key,
     required this.label,
     required this.onPressed,
+    this.trailingIcon,
     this.loading = false,
     this.loadingLabel = 'Loading',
   });
 
   final String label;
   final VoidCallback? onPressed;
+  final IconData? trailingIcon;
   final bool loading;
   final String loadingLabel;
 
@@ -19,6 +21,18 @@ class AppButton extends StatelessWidget {
     final reduceMotion = MediaQuery.disableAnimationsOf(context);
     return FilledButton(
       onPressed: loading ? null : onPressed,
+      style: ButtonStyle(
+        foregroundBuilder: (context, states, child) => AnimatedScale(
+          scale: !reduceMotion && states.contains(WidgetState.pressed)
+              ? 0.94
+              : 1,
+          duration: reduceMotion
+              ? Duration.zero
+              : const Duration(milliseconds: 120),
+          curve: Curves.easeOutCubic,
+          child: child,
+        ),
+      ),
       child: AnimatedSwitcher(
         duration: reduceMotion
             ? Duration.zero
@@ -49,7 +63,17 @@ class AppButton extends StatelessWidget {
                   ),
                 ),
               )
-            : Text(label, key: const ValueKey('label')),
+            : Row(
+                key: const ValueKey('label'),
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Flexible(child: Text(label)),
+                  if (trailingIcon != null) ...[
+                    const SizedBox(width: 8),
+                    Icon(trailingIcon, size: 19),
+                  ],
+                ],
+              ),
       ),
     );
   }

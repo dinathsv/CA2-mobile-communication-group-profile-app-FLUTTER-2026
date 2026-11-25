@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nine/data/member_registry.dart';
@@ -28,14 +29,17 @@ void main() {
         ),
       );
 
+      final assets = await AssetManifest.loadFromAssetBundle(rootBundle);
+      final bundledPaths = assets.listAssets().toSet();
       expect(MemberRegistry.entries, hasLength(designs.length));
       for (final (index, entry) in MemberRegistry.entries.indexed) {
         final number = '${index + 1}'.padLeft(2, '0');
         expect(entry.profile.id, 'member_$number');
         expect(
           entry.profile.photoAsset,
-          'assets/members/member_$number/portrait.png',
+          startsWith('assets/members/member_$number/'),
         );
+        expect(bundledPaths, contains(entry.profile.photoAsset));
         expect(entry.profile.designName, designs[index]);
         expect(
           entry.builder(context).runtimeType.toString(),

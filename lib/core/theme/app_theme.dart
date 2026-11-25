@@ -26,6 +26,68 @@ abstract final class AppTheme {
     border: const Color(0xff3d3d39),
   );
 
+  static ThemeData portal(ThemeData theme) {
+    final dark = theme.brightness == Brightness.dark;
+    final accent = dark ? const Color(0xffc2b7ff) : const Color(0xff4e3ca5);
+    final scheme = theme.colorScheme.copyWith(
+      primary: accent,
+      surface: dark ? const Color(0xff111017) : const Color(0xfffbf9fd),
+      surfaceContainerLow: dark ? const Color(0xff222033) : Colors.white,
+      surfaceContainerHighest: dark
+          ? const Color(0xff302a46)
+          : const Color(0xffeae3f7),
+      outlineVariant: dark ? const Color(0xff433957) : const Color(0xffdfdaeb),
+      onPrimary: dark ? const Color(0xff1b1039) : Colors.white,
+      onSurface: dark ? const Color(0xfff8f6ff) : const Color(0xff201a32),
+      onSurfaceVariant: dark
+          ? const Color(0xffb9b3cc)
+          : const Color(0xff625a77),
+    );
+    final fieldBorder = OutlineInputBorder(
+      borderRadius: BorderRadius.circular(15),
+      borderSide: BorderSide(
+        color: dark ? const Color(0xff3a354d) : const Color(0xffdfdaeb),
+      ),
+    );
+
+    return theme.copyWith(
+      colorScheme: scheme,
+      scaffoldBackgroundColor: scheme.surface,
+      inputDecorationTheme: theme.inputDecorationTheme.copyWith(
+        fillColor: dark ? const Color(0xff222033) : const Color(0xfff8f6fc),
+        prefixIconColor: scheme.onSurfaceVariant,
+        labelStyle: TextStyle(color: scheme.onSurfaceVariant),
+        floatingLabelStyle: TextStyle(color: accent),
+        border: fieldBorder,
+        enabledBorder: fieldBorder,
+        focusedBorder: fieldBorder.copyWith(
+          borderSide: BorderSide(color: accent, width: 1.6),
+        ),
+      ),
+      filledButtonTheme: FilledButtonThemeData(
+        style: FilledButton.styleFrom(
+          backgroundColor: accent,
+          foregroundColor: scheme.onPrimary,
+          minimumSize: const Size(0, 54),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+        ),
+      ),
+    );
+  }
+
+  static RadialGradient portalBackdrop(Brightness brightness) {
+    return RadialGradient(
+      center: const Alignment(0, -0.31),
+      radius: 0.94,
+      colors: brightness == Brightness.dark
+          ? const [Color(0xff231e35), Color(0xff111017)]
+          : const [Color(0xffeee8fb), Color(0xfffbf9fd)],
+    );
+  }
+
   static ThemeData _build({
     required Brightness brightness,
     required Color surface,
