@@ -5,14 +5,35 @@ import '../../../widgets/member_photo.dart';
 
 final member02Profile = MemberProfile(
   id: 'member_02',
-  fullName: 'Full name pending',
+  fullName: 'Hamas Akram',
   studentId: 'Student ID pending',
   address: 'Address pending',
-  email: 'Email pending',
+  email: 'hamasakram2003@gmail.com',
   photoAsset: 'assets/members/member_02/portrait.png',
-  qualifications: const ['Academic qualifications pending'],
-  softSkills: const ['Soft skills pending'],
-  specialTalents: const ['Special talents pending'],
+  qualifications: const [
+    'NDT in Information Technology - Institute of Technology, University of Moratuwa (2025-2027)',
+    'GCE Advanced Level - Combined Mathematics, Chemistry and Physics (2020-2023)',
+  ],
+  softSkills: const [
+    'Problem Solving',
+    'Attention to Detail',
+    'Logical Thinking',
+    'Creativity',
+    'Teamwork & Communication',
+    'Quick Learner',
+    'Adaptability',
+    'Time Management',
+    'Independent Working',
+    'Meeting Deadlines',
+  ],
+  specialTalents: const [
+    'Full-stack development across frontend and backend',
+    'Building practical, real-world software applications',
+    'Debugging and finding practical solutions',
+    'User-focused UI/UX design',
+    'Care for code quality, data accuracy, and validation',
+    'Learning new tools and frameworks quickly',
+  ],
   designName: 'TERMINAL',
 );
 
@@ -33,6 +54,71 @@ class _Member02ScreenState extends State<Member02Screen>
   static const _muted = Color(0xFF89968D);
   static const _border = Color(0xFF27352C);
   static const _mono = 'monospace';
+  static const _professionalTitle =
+      'IT Undergraduate | Software Engineering & Full-Stack Developer | AI/ML Enthusiast';
+  static const _profileSummary =
+      'Motivated IT undergraduate passionate about software development and practical applications. '
+      'Experienced with Python, Java, JavaScript, React.js, Spring Boot, MySQL, and MongoDB, '
+      'with foundational UI/UX design knowledge. Seeking a Software Engineering internship '
+      'to grow technical expertise and contribute to a development team.';
+  static const _phone = '+94 77 0795463';
+  static const _contactLinks = <(String, String)>[
+    ('LINKEDIN', 'linkedin.com/in/hamas-akram-379a78241/'),
+    ('GITHUB', 'github.com/HamasAkram03'),
+    ('PORTFOLIO', 'hamas-akram-portfolio.vercel.app'),
+  ];
+  static const _certifications = <(String, String)>[
+    ('AI/ML Engineer - Stage 1', 'SLIIT Uni | 2026'),
+    ('Python Programming', 'CODL, University of Moratuwa | 2025'),
+    ('Version Control', 'Coursera | 2026'),
+    ('JavaScript Essentials 1', 'Cisco Networking Academy | 2026'),
+  ];
+  static const _technicalSkillGroups = <(String, String)>[
+    ('LANGUAGES', 'Java, JavaScript, Python, PHP, HTML, CSS'),
+    ('FRONTEND', 'React.js, HTML5, CSS3, JavaScript, Bootstrap, Tailwind CSS'),
+    ('BACKEND', 'Spring Boot, Node.js, Express.js, PHP'),
+    ('DATABASE', 'MySQL, MongoDB'),
+    ('DESIGN', 'Figma, Canva, UI/UX Design, Wireframing, Prototyping'),
+    ('TOOLS', 'Git, GitHub, VS Code, NetBeans, Postman'),
+    (
+      'CONCEPTS',
+      'OOP, REST APIs, Full-Stack Development, Responsive Design, SDLC, Database Management',
+    ),
+  ];
+  static const _spokenLanguages =
+      'English - Professional\nSinhala - Professional\nTamil - Native';
+  static const _projects = <(String, String, String, String)>[
+    (
+      'SeettuManager',
+      'Java, Spring Boot, React, MySQL',
+      'Rotating savings management for groups, members, contributions, payments, and financial records, with role-based access.',
+      'github.com/AJRaaef/seetu_manager',
+    ),
+    (
+      'Pharmacy Management System',
+      'HTML, PHP, JavaScript, MySQL',
+      'Medicine tracking, inventory and supplier management, sales processing, and stock availability.',
+      'github.com/Mohamed-Asriff/Pharmacy-Management-System',
+    ),
+    (
+      'UniVerse Events Management System',
+      'HTML, CSS, PHP, JavaScript, MySQL',
+      'Responsive university event discovery, event details, registrations, and participant management.',
+      'github.com/HamasAkram03/event-management-system-',
+    ),
+    (
+      'Inventory Management System',
+      'Spring Boot, React, MySQL',
+      'Full-stack inventory tracking with stock monitoring, transactions, product catalog, and low-stock alerts.',
+      'github.com/reezmahanan/SCM-IMS',
+    ),
+    (
+      'Portfolio Website',
+      'React, Vite, Tailwind CSS',
+      'Responsive portfolio presenting profile, skills, services, projects, and contact information.',
+      'Portfolio: hamas-akram-portfolio.vercel.app\nGitHub: github.com/HamasAkram03/Hamas_Akram_Portfolio',
+    ),
+  ];
 
   static const _tabs = ['ABOUT', 'EDUCATION', 'SKILLS'];
 
@@ -269,6 +355,16 @@ class _Member02ScreenState extends State<Member02Screen>
                         ),
                       ),
                     ),
+                    const SizedBox(height: 7),
+                    Text(
+                      _professionalTitle,
+                      softWrap: true,
+                      style: const TextStyle(
+                        color: _text,
+                        fontSize: 12,
+                        height: 1.4,
+                      ),
+                    ),
                     const SizedBox(height: 9),
                     Text(
                       'MEMBER ${profile.number}  /  ${profile.designName}',
@@ -366,6 +462,7 @@ class _Member02ScreenState extends State<Member02Screen>
       ('STUDENT ID', profile.studentId, Icons.fingerprint_rounded),
       ('ADDRESS', profile.address, Icons.location_on_outlined),
       ('EMAIL', profile.email, Icons.alternate_email_rounded),
+      ('PHONE', _phone, Icons.phone_outlined),
     ];
 
     return Column(
@@ -390,7 +487,34 @@ class _Member02ScreenState extends State<Member02Screen>
           ),
         ),
         const SizedBox(height: 22),
-        _sectionLabel('SPECIAL TALENTS'),
+        _sectionLabel('PROFILE / SUMMARY'),
+        const SizedBox(height: 10),
+        _panelCard(
+          child: Text(
+            _profileSummary,
+            style: const TextStyle(color: _text, fontSize: 14, height: 1.55),
+          ),
+        ),
+        const SizedBox(height: 22),
+        _sectionLabel('ONLINE / CONTACT'),
+        const SizedBox(height: 10),
+        _panelCard(
+          child: Column(
+            children: [
+              for (var index = 0; index < _contactLinks.length; index++) ...[
+                _detailRow(
+                  _contactLinks[index].$1,
+                  _contactLinks[index].$2,
+                  Icons.open_in_new_rounded,
+                ),
+                if (index != _contactLinks.length - 1)
+                  const Divider(height: 22, color: _border),
+              ],
+            ],
+          ),
+        ),
+        const SizedBox(height: 22),
+        _sectionLabel('SPECIAL TALENTS / STRENGTHS'),
         const SizedBox(height: 10),
         _panelCard(
           child: Column(
@@ -417,6 +541,13 @@ class _Member02ScreenState extends State<Member02Screen>
             ],
           ),
         ),
+        const SizedBox(height: 22),
+        _sectionLabel('PROJECTS / SELECTED WORK'),
+        const SizedBox(height: 10),
+        for (var index = 0; index < _projects.length; index++) ...[
+          _projectCard(_projects[index]),
+          if (index != _projects.length - 1) const SizedBox(height: 10),
+        ],
       ],
     );
   }
@@ -441,6 +572,23 @@ class _Member02ScreenState extends State<Member02Screen>
                   index + 1,
                   profile.qualifications[index],
                   isLast: index == profile.qualifications.length - 1,
+                ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 22),
+        _sectionLabel('CERTIFICATIONS / PROFESSIONAL DEVELOPMENT'),
+        const SizedBox(height: 10),
+        _panelCard(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              for (var index = 0; index < _certifications.length; index++)
+                _qualificationRow(
+                  index + 1,
+                  '${_certifications[index].$1}\n${_certifications[index].$2}',
+                  isLast: index == _certifications.length - 1,
+                  kind: 'CERTIFICATION',
                 ),
             ],
           ),
@@ -503,6 +651,38 @@ class _Member02ScreenState extends State<Member02Screen>
             ],
           ),
         ),
+        const SizedBox(height: 22),
+        _sectionLabel('TECHNICAL SKILLS'),
+        const SizedBox(height: 10),
+        _panelCard(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              for (
+                var index = 0;
+                index < _technicalSkillGroups.length;
+                index++
+              ) ...[
+                _detailRow(
+                  _technicalSkillGroups[index].$1,
+                  _technicalSkillGroups[index].$2,
+                  Icons.code_rounded,
+                ),
+                if (index != _technicalSkillGroups.length - 1)
+                  const Divider(height: 22, color: _border),
+              ],
+            ],
+          ),
+        ),
+        const SizedBox(height: 22),
+        _sectionLabel('LANGUAGES'),
+        const SizedBox(height: 10),
+        _panelCard(
+          child: Text(
+            _spokenLanguages,
+            style: const TextStyle(color: _text, fontSize: 14, height: 1.8),
+          ),
+        ),
       ],
     );
   }
@@ -535,10 +715,54 @@ class _Member02ScreenState extends State<Member02Screen>
     );
   }
 
+  Widget _projectCard((String, String, String, String) project) {
+    return _panelCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            project.$1,
+            style: const TextStyle(
+              color: _text,
+              fontSize: 15,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          const SizedBox(height: 7),
+          Text(
+            project.$2,
+            style: const TextStyle(
+              color: _accent,
+              fontFamily: _mono,
+              fontSize: 10,
+              height: 1.5,
+            ),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            project.$3,
+            style: const TextStyle(color: _text, fontSize: 13, height: 1.5),
+          ),
+          const Divider(height: 22, color: _border),
+          SelectableText(
+            project.$4,
+            style: const TextStyle(
+              color: _muted,
+              fontFamily: _mono,
+              fontSize: 10,
+              height: 1.5,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _qualificationRow(
     int number,
     String qualification, {
     required bool isLast,
+    String kind = 'QUALIFICATION',
   }) {
     return IntrinsicHeight(
       child: Row(
@@ -581,7 +805,7 @@ class _Member02ScreenState extends State<Member02Screen>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '0$number  /  QUALIFICATION',
+                    '0$number  /  $kind',
                     style: const TextStyle(
                       color: _muted,
                       fontFamily: _mono,
