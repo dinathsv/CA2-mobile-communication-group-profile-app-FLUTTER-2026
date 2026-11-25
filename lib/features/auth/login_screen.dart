@@ -61,51 +61,6 @@ class _LoginScreenState extends State<LoginScreen> {
     if (_error != null) setState(() => _error = null);
   }
 
-  ThemeData _formTheme(ThemeData theme) {
-    final dark = theme.brightness == Brightness.dark;
-    final accent = dark ? const Color(0xffc2b7ff) : const Color(0xff4e3ca5);
-    final scheme = theme.colorScheme.copyWith(
-      primary: accent,
-      onPrimary: dark ? const Color(0xff1b1039) : Colors.white,
-      onSurface: dark ? const Color(0xfff8f6ff) : const Color(0xff201a32),
-      onSurfaceVariant: dark
-          ? const Color(0xffb9b3cc)
-          : const Color(0xff625a77),
-    );
-    final fieldBorder = OutlineInputBorder(
-      borderRadius: BorderRadius.circular(15),
-      borderSide: BorderSide(
-        color: dark ? const Color(0xff3a354d) : const Color(0xffdfdaeb),
-      ),
-    );
-
-    return theme.copyWith(
-      colorScheme: scheme,
-      inputDecorationTheme: theme.inputDecorationTheme.copyWith(
-        fillColor: dark ? const Color(0xff222033) : const Color(0xfff8f6fc),
-        prefixIconColor: scheme.onSurfaceVariant,
-        labelStyle: TextStyle(color: scheme.onSurfaceVariant),
-        floatingLabelStyle: TextStyle(color: accent),
-        border: fieldBorder,
-        enabledBorder: fieldBorder,
-        focusedBorder: fieldBorder.copyWith(
-          borderSide: BorderSide(color: accent, width: 1.6),
-        ),
-      ),
-      filledButtonTheme: FilledButtonThemeData(
-        style: FilledButton.styleFrom(
-          backgroundColor: accent,
-          foregroundColor: scheme.onPrimary,
-          minimumSize: const Size(0, 54),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
-          ),
-          textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
-        ),
-      ),
-    );
-  }
-
   Widget _buildContent(ThemeData theme) {
     final colors = theme.colorScheme;
     final error = _error;
@@ -230,19 +185,12 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final dark = theme.brightness == Brightness.dark;
     final reduceMotion = MediaQuery.disableAnimationsOf(context);
 
     return Scaffold(
       body: DecoratedBox(
         decoration: BoxDecoration(
-          gradient: RadialGradient(
-            center: const Alignment(0, -0.31),
-            radius: 0.94,
-            colors: dark
-                ? const [Color(0xff231e35), Color(0xff111017)]
-                : const [Color(0xffeee8fb), Color(0xfffbf9fd)],
-          ),
+          gradient: AppTheme.portalBackdrop(theme.brightness),
         ),
         child: SafeArea(
           child: CustomScrollView(
@@ -271,7 +219,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             child: child,
                           ),
                         ),
-                        child: _buildContent(_formTheme(theme)),
+                        child: _buildContent(AppTheme.portal(theme)),
                       ),
                     ),
                   ),

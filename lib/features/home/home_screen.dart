@@ -51,17 +51,19 @@ class _HomeScreenState extends State<HomeScreen>
 
   void _updateSearch(String value) => setState(() => _query = value);
 
-  void _openMember(MemberDirectoryEntry member) {
+  Future<void> _openMember(MemberDirectoryEntry member) async {
     FocusScope.of(context).unfocus();
-    Navigator.of(context).push(memberProfileRoute(context, member.builder));
+    final route = memberProfileRoute(context, member.builder);
+    await Navigator.of(context).push(route);
+    await route.completed;
   }
 
-  Future<void> _confirmSignOut() async {
+  Future<void> _confirmSignOut(BuildContext portalContext) async {
     if (_signingOut) return;
     FocusScope.of(context).unfocus();
 
     final confirmed = await showDialog<bool>(
-      context: context,
+      context: portalContext,
       useRootNavigator: false,
       animationStyle: MediaQuery.disableAnimationsOf(context)
           ? AnimationStyle.noAnimation
@@ -100,175 +102,214 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final dark = theme.brightness == Brightness.dark;
-    final results = MemberRegistry.search(_query);
-    final reduceMotion = MediaQuery.disableAnimationsOf(context);
+    final theme = AppTheme.portal(Theme.of(context));
 
-    return Scaffold(
-      body: SafeArea(
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            const maxContentWidth = 744.0;
-            const gap = 14.0;
-            final gutter = math.max(
-              20.0,
-              (constraints.maxWidth - maxContentWidth) / 2,
-            );
-            final cardWidth = (constraints.maxWidth - 2 * gutter - gap) / 2;
-            final labelHeight =
-                40 + MediaQuery.textScalerOf(context).scale(18) * 2.2;
-
-            return CustomScrollView(
-              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-              slivers: [
-                SliverPadding(
-                  padding: EdgeInsets.fromLTRB(gutter, 18, gutter, 18),
-                  sliver: SliverToBoxAdapter(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: FittedBox(
-                                fit: BoxFit.scaleDown,
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                  'NINE.',
-                                  style: AppTheme.wordmark.copyWith(
-                                    fontSize: 44,
-                                    letterSpacing: -3.6,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            IconButton.outlined(
-                              tooltip: dark
-                                  ? 'Use light theme'
-                                  : 'Use dark theme',
-                              onPressed: () =>
-                                  widget.onToggleTheme(theme.brightness),
-                              icon: Icon(
-                                dark
-                                    ? Icons.light_mode_outlined
-                                    : Icons.dark_mode_outlined,
-                              ),
-                            ),
-                            const SizedBox(width: 8),
-                            IconButton.outlined(
-                              tooltip: 'Sign out',
-                              onPressed: _signingOut ? null : _confirmSignOut,
-                              icon: const Icon(Icons.logout_rounded),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 29),
-                        Semantics(
-                          header: true,
-                          child: Text(
-                            'The collective',
-                            style: theme.textTheme.headlineSmall,
-                          ),
-                        ),
-                        const SizedBox(height: 14),
-                        TextField(
-                          controller: _search,
-                          onChanged: _updateSearch,
-                          textInputAction: TextInputAction.search,
-                          decoration: InputDecoration(
-                            labelText: 'Search members',
-                            prefixIcon: const Icon(Icons.search_rounded),
-                            suffixIcon: _query.isEmpty
-                                ? null
-                                : IconButton(
-                                    tooltip: 'Clear search',
-                                    onPressed: () {
-                                      _search.clear();
-                                      _updateSearch('');
-                                    },
-                                    icon: const Icon(Icons.close_rounded),
-                                  ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                if (results.isEmpty)
-                  SliverPadding(
-                    padding: EdgeInsets.fromLTRB(gutter, 40, gutter, 28),
-                    sliver: SliverToBoxAdapter(
-                      child: Semantics(
-                        liveRegion: true,
-                        child: Column(
-                          children: [
-                            Text(
-                              'No members found',
-                              style: theme.textTheme.titleMedium,
-                            ),
-                            const SizedBox(height: 6),
-                            Text(
-                              'Try a different name.',
-                              style: TextStyle(
-                                color: theme.colorScheme.onSurfaceVariant,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  )
-                else
-                  SliverPadding(
-                    padding: EdgeInsets.fromLTRB(gutter, 0, gutter, 24),
-                    sliver: SliverGrid.builder(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: gap,
-                        mainAxisSpacing: gap,
-                        mainAxisExtent: cardWidth * 1.08 + labelHeight,
-                      ),
-                      itemCount: results.length,
-                      itemBuilder: (context, index) {
-                        final member = results[index];
-                        final card = MemberCard(
-                          key: ValueKey(member.profile.id),
-                          profile: member.profile,
-                          onTap: () => _openMember(member),
-                        );
-                        if (reduceMotion || _entrance.isCompleted) return card;
-
-                        final start = index * 0.055;
-                        final progress = _entrance.drive(
-                          CurveTween(
-                            curve: Interval(
-                              start,
-                              start + 0.54,
-                              curve: Curves.easeOutCubic,
-                            ),
-                          ),
-                        );
-                        return FadeTransition(
-                          opacity: progress,
-                          child: SlideTransition(
-                            position: progress.drive(
-                              Tween(
-                                begin: const Offset(0, 0.055),
-                                end: Offset.zero,
-                              ),
-                            ),
-                            child: card,
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-              ],
-            );
-          },
+    return Theme(
+      data: theme,
+      child: Scaffold(
+        body: DecoratedBox(
+          decoration: BoxDecoration(
+            gradient: AppTheme.portalBackdrop(theme.brightness),
+          ),
+          child: SafeArea(child: LayoutBuilder(builder: _buildDirectory)),
         ),
       ),
+    );
+  }
+
+  Widget _buildDirectory(BuildContext context, BoxConstraints constraints) {
+    const gap = 16.0;
+    const maxContentWidth = 980.0;
+    final theme = Theme.of(context);
+    final colors = theme.colorScheme;
+    final dark = theme.brightness == Brightness.dark;
+    final reduceMotion = MediaQuery.disableAnimationsOf(context);
+    final results = MemberRegistry.search(_query);
+    final gutter = math.max(18.0, (constraints.maxWidth - maxContentWidth) / 2);
+    final width = constraints.maxWidth - 2 * gutter;
+    final columns = width >= 750 ? 3 : (width >= 260 ? 2 : 1);
+    final cardWidth = (width - (columns - 1) * gap) / columns;
+    final textScale = MediaQuery.textScalerOf(context);
+    final cardHeight = cardWidth * 0.9 + MemberCard.captionHeight(textScale);
+    final toolStyle = IconButton.styleFrom(
+      foregroundColor: colors.primary,
+      backgroundColor: colors.surfaceContainerLow.withValues(alpha: 0.76),
+      side: BorderSide(color: colors.outlineVariant),
+    );
+
+    return CustomScrollView(
+      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+      slivers: [
+        SliverPadding(
+          padding: EdgeInsets.fromLTRB(gutter, 20, gutter, 22),
+          sliver: SliverToBoxAdapter(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        alignment: Alignment.centerLeft,
+                        child: Text.rich(
+                          TextSpan(
+                            text: 'NINE',
+                            children: [
+                              TextSpan(
+                                text: '.',
+                                style: TextStyle(color: colors.primary),
+                              ),
+                            ],
+                          ),
+                          style: AppTheme.wordmark.copyWith(
+                            color: colors.onSurface,
+                            fontSize: 44,
+                            letterSpacing: -3.6,
+                          ),
+                        ),
+                      ),
+                    ),
+                    IconButton.outlined(
+                      style: toolStyle,
+                      tooltip: dark ? 'Use light theme' : 'Use dark theme',
+                      onPressed: () => widget.onToggleTheme(theme.brightness),
+                      icon: Icon(
+                        dark
+                            ? Icons.light_mode_outlined
+                            : Icons.dark_mode_outlined,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    IconButton.outlined(
+                      style: toolStyle,
+                      tooltip: 'Sign out',
+                      onPressed: _signingOut
+                          ? null
+                          : () => _confirmSignOut(context),
+                      icon: const Icon(Icons.logout_rounded),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 30),
+                SizedBox(
+                  width: double.infinity,
+                  child: Wrap(
+                    spacing: 18,
+                    runSpacing: 6,
+                    alignment: WrapAlignment.spaceBetween,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      Semantics(
+                        header: true,
+                        child: Text(
+                          'The collective',
+                          style: theme.textTheme.headlineLarge?.copyWith(
+                            color: colors.onSurface,
+                          ),
+                        ),
+                      ),
+                      if (results.isNotEmpty)
+                        Text(
+                          results.length == 1
+                              ? '1 member'
+                              : '${results.length} members',
+                          style: theme.textTheme.labelLarge?.copyWith(
+                            color: colors.onSurfaceVariant,
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 15),
+                TextField(
+                  controller: _search,
+                  onChanged: _updateSearch,
+                  textInputAction: TextInputAction.search,
+                  decoration: InputDecoration(
+                    labelText: 'Search members',
+                    prefixIcon: const Icon(Icons.search_rounded),
+                    suffixIcon: _query.isEmpty
+                        ? null
+                        : IconButton(
+                            tooltip: 'Clear search',
+                            onPressed: () {
+                              _search.clear();
+                              _updateSearch('');
+                            },
+                            icon: const Icon(Icons.close_rounded),
+                          ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        if (results.isEmpty)
+          SliverPadding(
+            padding: EdgeInsets.fromLTRB(gutter, 34, gutter, 28),
+            sliver: SliverToBoxAdapter(
+              child: Semantics(
+                liveRegion: true,
+                child: Column(
+                  children: [
+                    Text(
+                      'No members found',
+                      style: theme.textTheme.titleMedium,
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      'Try a different name.',
+                      style: TextStyle(color: colors.onSurfaceVariant),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          )
+        else
+          SliverPadding(
+            padding: EdgeInsets.fromLTRB(gutter, 0, gutter, 30),
+            sliver: SliverGrid.builder(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: columns,
+                crossAxisSpacing: gap,
+                mainAxisSpacing: gap,
+                mainAxisExtent: cardHeight,
+              ),
+              itemCount: results.length,
+              itemBuilder: (context, index) {
+                final member = results[index];
+                final card = MemberCard(
+                  key: ValueKey(member.profile.id),
+                  profile: member.profile,
+                  onTap: () => _openMember(member),
+                );
+                if (reduceMotion || _entrance.isCompleted) return card;
+
+                final start = index * 0.055;
+                final progress = _entrance.drive(
+                  CurveTween(
+                    curve: Interval(
+                      start,
+                      start + 0.54,
+                      curve: Curves.easeOutCubic,
+                    ),
+                  ),
+                );
+                return FadeTransition(
+                  opacity: progress,
+                  child: SlideTransition(
+                    position: progress.drive(
+                      Tween(begin: const Offset(0, 0.04), end: Offset.zero),
+                    ),
+                    child: card,
+                  ),
+                );
+              },
+            ),
+          ),
+      ],
     );
   }
 }
