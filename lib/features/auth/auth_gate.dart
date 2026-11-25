@@ -68,10 +68,20 @@ class _AuthGateState extends State<AuthGate> {
         final userId = snapshot.data;
         if (userId == null) return LoginScreen(auth: widget.auth);
 
-        return _SignedInNavigator(
+        final reduceMotion = MediaQuery.disableAnimationsOf(context);
+        return TweenAnimationBuilder<double>(
           key: ValueKey(userId),
-          auth: widget.auth,
-          onToggleTheme: widget.onToggleTheme,
+          tween: Tween(begin: reduceMotion ? 1 : 0, end: 1),
+          duration: reduceMotion
+              ? Duration.zero
+              : const Duration(milliseconds: 260),
+          curve: Curves.easeOutCubic,
+          builder: (context, value, child) =>
+              Opacity(opacity: value, child: child),
+          child: _SignedInNavigator(
+            auth: widget.auth,
+            onToggleTheme: widget.onToggleTheme,
+          ),
         );
       },
     );
@@ -79,11 +89,7 @@ class _AuthGateState extends State<AuthGate> {
 }
 
 class _SignedInNavigator extends StatefulWidget {
-  const _SignedInNavigator({
-    super.key,
-    required this.auth,
-    required this.onToggleTheme,
-  });
+  const _SignedInNavigator({required this.auth, required this.onToggleTheme});
 
   final AuthService auth;
   final ValueChanged<Brightness> onToggleTheme;

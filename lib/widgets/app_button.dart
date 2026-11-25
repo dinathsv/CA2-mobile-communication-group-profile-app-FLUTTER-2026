@@ -21,6 +21,18 @@ class AppButton extends StatelessWidget {
     final reduceMotion = MediaQuery.disableAnimationsOf(context);
     return FilledButton(
       onPressed: loading ? null : onPressed,
+      style: ButtonStyle(
+        foregroundBuilder: (context, states, child) => AnimatedScale(
+          scale: !reduceMotion && states.contains(WidgetState.pressed)
+              ? 0.94
+              : 1,
+          duration: reduceMotion
+              ? Duration.zero
+              : const Duration(milliseconds: 120),
+          curve: Curves.easeOutCubic,
+          child: child,
+        ),
+      ),
       child: AnimatedSwitcher(
         duration: reduceMotion
             ? Duration.zero
