@@ -8,14 +8,30 @@ import '../../../widgets/member_photo.dart';
 // ---------------------------------------------------------------------------
 final member06Profile = MemberProfile(
   id: 'member_06',
-  fullName: 'Placeholder Member 06',
-  studentId: 'Student ID pending',
-  address: 'Address pending',
-  email: 'Email pending',
+  fullName: 'Ravindi Ranthilini',
+  studentId: '23IT0476',
+  address: 'Tangalle, Sri Lanka',
+  email: 'rranthilini29@gmail.com',
   photoAsset: 'assets/members/member_06/portrait.png',
-  qualifications: const ['Qualifications pending'],
-  softSkills: const ['Soft skills pending'],
-  specialTalents: const ['Special talents pending'],
+  qualifications: const [
+    'National Diploma in Technology (NDT) in Information Technology — Institute of Technology, University of Moratuwa',
+    'Diploma in Information Technology (Excellent Pass) — LPEC Campus',
+    'G.C.E. Advanced Level (Physical Science Stream) — H/Ruhunu Vijayaba National College',
+  ],
+  softSkills: const [
+    'Effective Communication',
+    'Teamwork & Collaboration',
+    'Problem Solving',
+    'Decision Making',
+    'Adaptability',
+    'Visual Storytelling',
+  ],
+  specialTalents: const [
+    'UI/UX & Product Design Architecture (Figma, Design Systems, Usability Testing)',
+    'Frontend & Interactive Web Engineering (React, Flutter, Responsive Design)',
+    'Full-Stack Systems & RESTful API Architecture',
+    'Community Leadership & Environmental Advocacy (ZeroPlastic TRAIL 26)',
+  ],
   designName: 'VOGUE',
 );
 
