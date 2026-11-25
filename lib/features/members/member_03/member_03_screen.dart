@@ -9,17 +9,28 @@ import '../../../widgets/member_photo.dart';
 
 final member03Profile = MemberProfile(
   id: 'member_03',
-  fullName: 'Placeholder Member 03',
-  studentId: 'To be added',
-  address: 'To be added',
-  email: 'To be added',
+  fullName: 'S Dinath',
+  studentId: '',
+  address: 'Colombo, Sri Lanka',
+  email: 'sdinath0528@gmail.com',
   photoAsset: 'assets/members/member_03/portrait.jpeg',
   qualifications: const [
-    'Degree or diploma to be added',
-    'Additional qualification to be added',
+    'National Diploma in IT (NDT) · ITUM, University of Moratuwa · 2025–2028',
+    'Bachelor of IT (External) · University of Moratuwa · 2024–2027',
+    'Diploma in IT & English (Merit) · ESOFT Metro Campus · 2022–2023',
   ],
-  softSkills: const ['Soft skill 1', 'Soft skill 2', 'Soft skill 3'],
-  specialTalents: const ['Special talent 1', 'Special talent 2'],
+  softSkills: const [
+    'Client communication',
+    'Problem-solving',
+    'Mentoring',
+    'Technical documentation',
+  ],
+  specialTalents: const [
+    'Java and Python backend development',
+    'API design and event-driven microservices',
+    'AI integration and retrieval-augmented generation',
+    'Deployment and production troubleshooting',
+  ],
   designName: 'AURA',
 );
 
@@ -123,7 +134,20 @@ class _Member03ScreenState extends State<Member03Screen>
                                   titleOpacity: _identityOpacity,
                                 ),
                                 const SizedBox(height: 28),
-                                _ContactPanel(profile: profile),
+                                _ProfileDetailsPanel(
+                                  details: [
+                                    _ProfileDetail(
+                                      icon: Icons.location_on_outlined,
+                                      label: 'Location',
+                                      value: profile.address,
+                                    ),
+                                    _ProfileDetail(
+                                      icon: Icons.mail_outline_rounded,
+                                      label: 'Email',
+                                      value: profile.email,
+                                    ),
+                                  ],
+                                ),
                                 const SizedBox(height: 26),
                                 const _SectionHeading(
                                   'Academic qualifications',
@@ -131,6 +155,44 @@ class _Member03ScreenState extends State<Member03Screen>
                                 const SizedBox(height: 10),
                                 _Qualifications(
                                   qualifications: profile.qualifications,
+                                ),
+                                const SizedBox(height: 26),
+                                const _SectionHeading('Highlights'),
+                                const SizedBox(height: 10),
+                                const _ProfileDetailsPanel(
+                                  details: [
+                                    _ProfileDetail(
+                                      icon: Icons.emoji_events_outlined,
+                                      label: 'ITUMIRC 2026',
+                                      value:
+                                          '1st place · Best Poster Award '
+                                          'for Information Technology',
+                                    ),
+                                    _ProfileDetail(
+                                      icon: Icons.hub_outlined,
+                                      label: 'CORE',
+                                      value:
+                                          'AI-assisted supply chain platform '
+                                          'built with Spring Boot, Kafka, '
+                                          'and FastAPI.',
+                                    ),
+                                    _ProfileDetail(
+                                      icon: Icons.health_and_safety_outlined,
+                                      label: 'ResQAI',
+                                      value:
+                                          'Disaster relief platform with '
+                                          'flood risk prediction and '
+                                          'emergency routing.',
+                                    ),
+                                    _ProfileDetail(
+                                      icon: Icons.dns_outlined,
+                                      label: 'Freelance backend development',
+                                      value:
+                                          'Built and supported three live '
+                                          'platforms for e-commerce, booking, '
+                                          'and logistics.',
+                                    ),
+                                  ],
                                 ),
                                 const SizedBox(height: 26),
                                 _SkillsPanel(skills: profile.softSkills),
@@ -286,10 +348,20 @@ class _AuraIntro extends StatelessWidget {
                 ),
                 const SizedBox(height: 10),
                 Text(
-                  'Student ID · ${profile.studentId}',
+                  'Software Engineering Undergraduate · Backend Developer',
                   textAlign: TextAlign.center,
                   style: textTheme.bodyMedium?.copyWith(color: _secondaryText),
                 ),
+                if (profile.studentId.isNotEmpty) ...[
+                  const SizedBox(height: 6),
+                  Text(
+                    'Student ID · ${profile.studentId}',
+                    textAlign: TextAlign.center,
+                    style: textTheme.bodyMedium?.copyWith(
+                      color: _secondaryText,
+                    ),
+                  ),
+                ],
               ],
             ),
           ),
@@ -441,10 +513,10 @@ class _FrostedPanel extends StatelessWidget {
   }
 }
 
-class _ContactPanel extends StatelessWidget {
-  const _ContactPanel({required this.profile});
+class _ProfileDetailsPanel extends StatelessWidget {
+  const _ProfileDetailsPanel({required this.details});
 
-  final MemberProfile profile;
+  final List<_ProfileDetail> details;
 
   @override
   Widget build(BuildContext context) {
@@ -453,17 +525,10 @@ class _ContactPanel extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
         child: Column(
           children: [
-            _ContactDetail(
-              icon: Icons.location_on_outlined,
-              label: 'Address',
-              value: profile.address,
-            ),
-            const Divider(height: 22, color: _glassBorder),
-            _ContactDetail(
-              icon: Icons.mail_outline_rounded,
-              label: 'Email',
-              value: profile.email,
-            ),
+            for (final (index, detail) in details.indexed) ...[
+              if (index > 0) const Divider(height: 22, color: _glassBorder),
+              detail,
+            ],
           ],
         ),
       ),
@@ -471,8 +536,8 @@ class _ContactPanel extends StatelessWidget {
   }
 }
 
-class _ContactDetail extends StatelessWidget {
-  const _ContactDetail({
+class _ProfileDetail extends StatelessWidget {
+  const _ProfileDetail({
     required this.icon,
     required this.label,
     required this.value,
