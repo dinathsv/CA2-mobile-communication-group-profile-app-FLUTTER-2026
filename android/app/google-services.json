@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "89016439745",
+    "project_id": "ndt-nine",
+    "storage_bucket": "ndt-nine.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:89016439745:android:d7f97580a82e6e55cd5540",
+        "android_client_info": {
+          "package_name": "lk.ndt.nine"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCX09viK0xrwURrzQBuqBO6Sly6yILOT54"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
