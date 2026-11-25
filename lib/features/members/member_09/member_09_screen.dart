@@ -5,14 +5,22 @@ import '../../../widgets/member_photo.dart';
 
 final member09Profile = MemberProfile(
   id: 'member_09',
-  fullName: 'Placeholder Member 09',
-  studentId: 'Student ID pending',
-  address: 'Address pending',
-  email: 'Email pending',
+  fullName: 'D.M.S.A.K. Dissanayaka',
+  studentId: '23IT0472',
+  address: 'Agarathenna Road, Palgahathenna, Passara',
+  email: 'sandalialoka011@gmail.com',
   photoAsset: 'assets/members/member_09/portrait.png',
-  qualifications: const ['Qualifications pending'],
-  softSkills: const ['Soft skills pending'],
-  specialTalents: const ['Special talents pending'],
+  qualifications: const [
+    'IT Diploma — Institute of Technology, University of Moratuwa (2024–2027)',
+    'G.C.E. A/L Physical Science — 2C, 1S | Badulla Central College',
+  ],
+  softSkills: const [
+    'Communication',
+    'Time Management',
+    'Problem Solving',
+    'Team Work',
+  ],
+  specialTalents: const ['Art & Craft', 'Drawing'],
   designName: 'CINEMA',
 );
 
