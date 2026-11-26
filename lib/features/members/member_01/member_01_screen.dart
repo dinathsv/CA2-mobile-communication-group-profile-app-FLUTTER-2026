@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/theme/app_theme.dart';
 import '../../../models/member_profile.dart';
 import '../../../widgets/member_photo.dart';
 
@@ -110,7 +111,7 @@ class _Member01ScreenState extends State<Member01Screen>
                 icon: const Icon(Icons.arrow_back),
               ),
               title: const Text(
-                'NINE.',
+                AppTheme.appName,
                 style: TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.w900,

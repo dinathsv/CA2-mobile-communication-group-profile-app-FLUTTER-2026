@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/theme/app_theme.dart';
 import '../../../models/member_profile.dart';
 import '../../../widgets/member_photo.dart';
 
@@ -325,7 +326,7 @@ class _Member05ScreenState extends State<Member05Screen>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const _Eyebrow(label: 'MEMBER 05  /  NINE.'),
+            const _Eyebrow(label: 'MEMBER 05  /  ${AppTheme.appName}'),
             const SizedBox(height: 12),
             Text(
               profile.fullName,
@@ -766,7 +767,7 @@ class _TopBar extends StatelessWidget {
           ),
           const SizedBox(width: 4),
           const Text(
-            'NINE.',
+            AppTheme.appName,
             style: TextStyle(
               color: _ink,
               fontSize: 17,

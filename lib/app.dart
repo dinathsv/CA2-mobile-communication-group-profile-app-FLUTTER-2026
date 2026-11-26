@@ -28,7 +28,7 @@ class _NineAppState extends State<NineApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'NINE.',
+      title: AppTheme.appName,
       debugShowCheckedModeBanner: false,
       theme: AppTheme.light,
       darkTheme: AppTheme.dark,
@@ -59,7 +59,7 @@ class FirebaseSetupApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'NINE.',
+      title: AppTheme.appName,
       debugShowCheckedModeBanner: false,
       theme: AppTheme.light,
       darkTheme: AppTheme.dark,
@@ -74,7 +74,7 @@ class FirebaseSetupApp extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text('NINE.', style: AppTheme.wordmark),
+                    Text(AppTheme.appName, style: AppTheme.wordmark),
                     SizedBox(height: 24),
                     Text('Firebase setup required'),
                     SizedBox(height: 8),

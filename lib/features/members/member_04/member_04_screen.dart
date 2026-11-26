@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../../../core/theme/app_theme.dart';
 import '../../../models/member_profile.dart';
 import '../../../widgets/member_photo.dart';
 
@@ -1023,7 +1024,7 @@ class _ZenColophon extends StatelessWidget {
         ),
         const SizedBox(width: 10),
         Text(
-          'NINE.  ·  $designName  ·  $memberNumber',
+          '${AppTheme.appName}  ·  $designName  ·  $memberNumber',
           style: const TextStyle(
             color: _oliveText,
             fontSize: 10.5,
