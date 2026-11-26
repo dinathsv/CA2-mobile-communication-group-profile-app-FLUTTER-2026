@@ -20,25 +20,6 @@ flutter doctor
 flutter pub get
 ```
 
-### Firebase setup for Android
-
-1. Create or select the group's project in the Firebase console. Enable **Authentication → Sign-in method → Email/Password**. Add a dedicated temporary assessment user under **Authentication → Users → Add user**. [Firebase password sign-in guide](https://firebase.google.com/docs/auth/flutter/password-auth)
-2. Install the Firebase CLI, sign in with a Google account that can configure the group project, and activate the FlutterFire CLI.
-
-   ```sh
-   firebase login
-   dart pub global activate flutterfire_cli
-   ```
-
-3. From the repository root, replace `YOUR_FIREBASE_PROJECT_ID` with the group's project ID and run the command below. Run `dart pub global run flutterfire_cli:flutterfire` in place of `flutterfire` if the pub cache's `bin` directory is outside your PATH. [FlutterFire setup guide](https://firebase.google.com/docs/flutter/setup)
-
-   ```sh
-   flutterfire configure --project=YOUR_FIREBASE_PROJECT_ID --platforms=android --android-package-name=lk.ndt.nine
-   ```
-
-4. Confirm that FlutterFire generated `lib/firebase_options.dart` and `android/app/google-services.json`. Android Gradle processes the JSON into the native resources used by `Firebase.initializeApp()`. Both generated files are local to each checkout. Assign the group leader to configure the shared project, or share the generated Android configuration privately with contributors who lack console access. [Android Firebase setup guide](https://firebase.google.com/docs/android/setup)
-5. Rebuild and sign in with the assessment account. The app displays a setup screen until valid Android Firebase configuration is present.
-
 ### Assessment login
 
 | Field | Value |
@@ -96,9 +77,11 @@ Signing out removes the authenticated navigator and its route history. The nativ
 | 04 | <img src="assets/members/member_04/portrait.png" alt="Portrait of Umindu Dinal" width="64"> | Umindu Dinal | 23IT0470 | ZEN | [Profile](lib/features/members/member_04/) · [Assets](assets/members/member_04/) |
 | 05 | <img src="assets/members/member_05/portrait.png" alt="Portrait of EDIRISINGHE ARACHCHILAGE SACHINI JINATHMA EDIRISINGHE" width="64"> | EDIRISINGHE ARACHCHILAGE SACHINI JINATHMA EDIRISINGHE | 23IT0474 | BENTO | [Profile](lib/features/members/member_05/) · [Assets](assets/members/member_05/) |
 | 06 | <img src="assets/members/member_06/portrait.png" alt="Portrait of Ravindi Ranthilini" width="64"> | Ravindi Ranthilini | 23IT0476 | VOGUE | [Profile](lib/features/members/member_06/) · [Assets](assets/members/member_06/) |
-| 07 | <img src="assets/members/member_07/portrait.png" alt="Placeholder portrait for Member 07" width="64"> | Pending | Pending | PULSE | [Profile](lib/features/members/member_07/) · [Assets](assets/members/member_07/) |
-| 08 | <img src="assets/members/member_08/portrait.png" alt="Placeholder portrait for Member 08" width="64"> | Pending | Pending | BRUTAL | [Profile](lib/features/members/member_08/) · [Assets](assets/members/member_08/) |
+| 07 | <img src="assets/members/member_07/portrait.png" alt="Portrait of Manusha Ginige" width="64"> | Manusha Ginige | 23IT0477 | PULSE | [Profile](lib/features/members/member_07/) · [Assets](assets/members/member_07/) |
+| 08 | <img src="assets/members/member_08/portrait.png" alt="Portrait of M. G. Dulan" width="64"> | M. G. Dulan | 23IT0473 | BRUTAL | [Profile](lib/features/members/member_08/) · [Assets](assets/members/member_08/) |
 | 09 | <img src="assets/members/member_09/portrait.png" alt="Portrait of D.M.S.A.K. Dissanayaka" width="64"> | D.M.S.A.K. Dissanayaka | 23IT0472 | CINEMA | [Profile](lib/features/members/member_09/) · [Assets](assets/members/member_09/) |
+
+S Dinath (Member 03) connected the app to Firebase Authentication.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for the member contract and Git workflow.
 
