@@ -4,27 +4,35 @@ import 'package:flutter/services.dart';
 import '../../../models/member_profile.dart';
 import '../../../widgets/member_photo.dart';
 
-/// Editable profile data for Member 04.
-/// Replace the placeholder strings below with verified personal details.
+/// Profile data for Member 04 (Umindu Dinal).
+/// Update `studentId` (and home `address`, if desired) as they are not listed
+/// on the CV.
 final member04Profile = MemberProfile(
   id: 'member_04',
-  fullName: 'Placeholder Member 04',
-  studentId: 'Student ID pending',
-  address: 'Address pending',
-  email: 'Email pending',
+  fullName: 'Umindu Dinal',
+  studentId: '23IT0470',
+  address: 'Diyagama, Sri Lanka',
+  email: 'umindudinal818@gmail.com',
   photoAsset: 'assets/members/member_04/portrait.png',
   qualifications: const [
-    'Qualification 1 — Institution & years pending',
-    'Qualification 2 — Secondary education pending',
+    'National Diploma in Technology (NDT) – Information Technology, Institute of Technology, University of Moratuwa (2025 – Present)',
+    'Front-End Web Development — University of Moratuwa (CODL)',
+    'Server-side Web Programming — University of Moratuwa (CODL)',
+    'Python Programming — University of Moratuwa (CODL)',
+    'Introduction to Software Quality Assurance — University of Moratuwa (CODL)',
   ],
   softSkills: const [
-    'Soft skill 1 pending',
-    'Soft skill 2 pending',
-    'Soft skill 3 pending',
+    'Problem Solving',
+    'User-Centered Design',
+    'Bilingual Communication',
+    'Continuous Learning',
+    'Team Collaboration',
   ],
   specialTalents: const [
-    'Special talent 1 pending',
-    'Special talent 2 pending',
+    'Flutter & Dart Cross-Platform Mobile Development (GuideLanka, Ape-Baas, AgriCare LK)',
+    'REST APIs, Firebase FCM & Supabase Backend Integration',
+    'AI-Powered Plant Disease Diagnosis (TensorFlow/Keras)',
+    'Live GPS Tracking, Interactive Maps & Geofencing',
   ],
   designName: 'ZEN',
 );
