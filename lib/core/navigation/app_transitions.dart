@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 
 final _profileCurve = CurveTween(curve: Curves.fastOutSlowIn);
-final _profileSlide = Tween<Offset>(
-  begin: const Offset(0.035, 0),
-  end: Offset.zero,
-);
+final _profileScale = Tween<double>(begin: 0.96, end: 1);
 
 PageRoute<void> memberProfileRoute(
   BuildContext context,
@@ -25,10 +22,12 @@ PageRoute<void> memberProfileRoute(
       }
 
       final progress = animation.drive(_profileCurve);
-      return SlideTransition(
-        position: progress.drive(_profileSlide),
-        textDirection: Directionality.of(context),
-        child: FadeTransition(opacity: progress, child: child),
+      return FadeTransition(
+        opacity: progress,
+        child: ScaleTransition(
+          scale: progress.drive(_profileScale),
+          child: child,
+        ),
       );
     },
   );

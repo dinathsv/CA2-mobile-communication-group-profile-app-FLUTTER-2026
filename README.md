@@ -8,7 +8,7 @@ IX is an Android member directory for the NDT Mobile Communication CA2 group ass
 
 - Flutter and null-safe Dart with Material 3 and shared light and dark themes.
 - Firebase Core and Firebase Authentication for email/password sign-in, persistent sessions, and confirmed sign-out.
-- A searchable two-column directory, nine independent profiles, and portrait transitions that respect the system's reduced-motion setting.
+- A searchable directory with carousel and list views, nine independent profiles, and portrait transitions that respect the system's reduced-motion setting.
 - A `StreamBuilder` for session changes and `setState` for the form, search, and theme.
 
 ## Local setup
