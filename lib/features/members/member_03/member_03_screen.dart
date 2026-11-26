@@ -10,7 +10,7 @@ import '../../../widgets/member_photo.dart';
 final member03Profile = MemberProfile(
   id: 'member_03',
   fullName: 'S Dinath',
-  studentId: '',
+  studentId: '23IT0471',
   address: 'Colombo, Sri Lanka',
   email: 'sdinath0528@gmail.com',
   photoAsset: 'assets/members/member_03/portrait.jpeg',

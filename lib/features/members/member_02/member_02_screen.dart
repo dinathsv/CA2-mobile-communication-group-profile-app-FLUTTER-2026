@@ -7,8 +7,8 @@ import '../../../widgets/member_photo.dart';
 final member02Profile = MemberProfile(
   id: 'member_02',
   fullName: 'Hamas Akram',
-  studentId: 'Student ID pending',
-  address: 'Address pending',
+  studentId: '23IT0479',
+  address: 'Colombo, Sri Lanka',
   email: 'hamasakram2003@gmail.com',
   photoAsset: 'assets/members/member_02/portrait.png',
   qualifications: const [
