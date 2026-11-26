@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../core/theme/app_theme.dart';
 import '../../services/auth_service.dart';
 import '../home/home_screen.dart';
 import 'login_screen.dart';
@@ -69,18 +70,23 @@ class _AuthGateState extends State<AuthGate> {
         if (userId == null) return LoginScreen(auth: widget.auth);
 
         final reduceMotion = MediaQuery.disableAnimationsOf(context);
-        return TweenAnimationBuilder<double>(
-          key: ValueKey(userId),
-          tween: Tween(begin: reduceMotion ? 1 : 0, end: 1),
-          duration: reduceMotion
-              ? Duration.zero
-              : const Duration(milliseconds: 260),
-          curve: Curves.easeOutCubic,
-          builder: (context, value, child) =>
-              Opacity(opacity: value, child: child),
-          child: _SignedInNavigator(
-            auth: widget.auth,
-            onToggleTheme: widget.onToggleTheme,
+        return DecoratedBox(
+          decoration: BoxDecoration(
+            gradient: AppTheme.portalBackdrop(Theme.of(context).brightness),
+          ),
+          child: TweenAnimationBuilder<double>(
+            key: ValueKey(userId),
+            tween: Tween(begin: reduceMotion ? 1 : 0, end: 1),
+            duration: reduceMotion
+                ? Duration.zero
+                : const Duration(milliseconds: 300),
+            curve: Curves.easeInOutCubic,
+            builder: (context, value, child) =>
+                Opacity(opacity: value, child: child),
+            child: _SignedInNavigator(
+              auth: widget.auth,
+              onToggleTheme: widget.onToggleTheme,
+            ),
           ),
         );
       },

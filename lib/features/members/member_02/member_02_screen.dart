@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/theme/app_theme.dart';
 import '../../../models/member_profile.dart';
 import '../../../widgets/member_photo.dart';
 
@@ -247,7 +248,7 @@ class _Member02ScreenState extends State<Member02Screen>
           ),
           const SizedBox(width: 4),
           const Text(
-            'NINE.',
+            AppTheme.appName,
             style: TextStyle(
               color: _accent,
               fontFamily: _mono,

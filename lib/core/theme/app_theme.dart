@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 abstract final class AppTheme {
+  static const appName = 'IX';
+
   static const wordmark = TextStyle(
     fontSize: 84,
     height: 0.93,

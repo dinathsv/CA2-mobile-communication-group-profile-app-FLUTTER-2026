@@ -1,8 +1,8 @@
-# NINE.
+# IX
 
 **Nine people. Nine identities.**
 
-NINE. is an Android member directory for the NDT Mobile Communication CA2 group assignment. It combines a shared sign-in and directory with nine profile screens owned by individual contributors.
+IX is an Android member directory for the NDT Mobile Communication CA2 group assignment. It combines a shared sign-in and directory with nine profile screens owned by individual contributors.
 
 ## Features and stack
 

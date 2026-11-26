@@ -79,16 +79,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 header: true,
                 child: FittedBox(
                   fit: BoxFit.scaleDown,
-                  child: Text.rich(
-                    TextSpan(
-                      text: 'NINE',
-                      children: [
-                        TextSpan(
-                          text: '.',
-                          style: TextStyle(color: colors.primary),
-                        ),
-                      ],
-                    ),
+                  child: Text(
+                    AppTheme.appName,
                     style: AppTheme.wordmark.copyWith(color: colors.onSurface),
                   ),
                 ),

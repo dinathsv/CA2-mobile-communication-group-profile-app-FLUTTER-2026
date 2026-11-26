@@ -152,16 +152,8 @@ class _HomeScreenState extends State<HomeScreen>
                       child: FittedBox(
                         fit: BoxFit.scaleDown,
                         alignment: Alignment.centerLeft,
-                        child: Text.rich(
-                          TextSpan(
-                            text: 'NINE',
-                            children: [
-                              TextSpan(
-                                text: '.',
-                                style: TextStyle(color: colors.primary),
-                              ),
-                            ],
-                          ),
+                        child: Text(
+                          AppTheme.appName,
                           style: AppTheme.wordmark.copyWith(
                             color: colors.onSurface,
                             fontSize: 44,

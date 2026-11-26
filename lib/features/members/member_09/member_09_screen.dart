@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/theme/app_theme.dart';
 import '../../../models/member_profile.dart';
 import '../../../widgets/member_photo.dart';
 
@@ -471,7 +472,7 @@ class _PrologueStrip extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Text(
-              'NINE. COLLECTIVE',
+              '${AppTheme.appName} COLLECTIVE',
               style: TextStyle(
                 color: _mutedGold,
                 fontSize: 11,

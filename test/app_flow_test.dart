@@ -54,6 +54,8 @@ void main() {
     (tester) async {
       final auth = await _start(tester);
       final submit = find.widgetWithText(FilledButton, 'Sign in');
+      expect(tester.widget<MaterialApp>(find.byType(MaterialApp)).title, 'IX');
+      expect(find.text('IX'), findsOneWidget);
       expect(find.text('The collective'), findsNothing);
 
       await tester.tap(submit);
@@ -97,6 +99,7 @@ void main() {
       await tester.tap(submit);
       await tester.pumpAndSettle();
       expect(find.text('The collective'), findsOneWidget);
+      expect(find.text('IX'), findsOneWidget);
     },
   );
 
@@ -138,18 +141,34 @@ void main() {
   });
 
   testWidgets(
-    'profile navigation preserves search and clears routes when the session ends',
+    'profile fades in, preserves search, and clears routes at sign-out',
     (tester) async {
       final auth = await _start(tester, signedIn: true);
       final search = find.byType(TextField);
       final member = MemberRegistry.entries.last.profile;
       final card = find.byKey(ValueKey(member.id));
+      final screen = find.byType(Member09Screen);
       await tester.enterText(search, member.fullName);
       await tester.pumpAndSettle();
 
       await tester.tap(card);
+      await tester.pump();
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 120));
+      expect(
+        find.ancestor(
+          of: screen,
+          matching: find.byWidgetPredicate(
+            (widget) =>
+                widget is FadeTransition &&
+                widget.opacity.value > 0 &&
+                widget.opacity.value < 1,
+          ),
+        ),
+        findsOneWidget,
+      );
       await tester.pumpAndSettle();
-      expect(find.byType(Member09Screen), findsOneWidget);
+      expect(screen, findsOneWidget);
       expect(
         find.byWidgetPredicate(
           (widget) => widget is Hero && widget.tag == 'member-member_09',
@@ -168,8 +187,10 @@ void main() {
       await tester.tap(card);
       await tester.pumpAndSettle();
       auth.setUser(null);
-      await tester.pumpAndSettle();
+      await tester.idle();
+      await tester.pump();
       expect(find.byType(Member09Screen, skipOffstage: false), findsNothing);
+      await tester.pumpAndSettle();
       expect(find.widgetWithText(FilledButton, 'Sign in'), findsOneWidget);
 
       auth.setUser('assessment-user');
@@ -200,10 +221,9 @@ void main() {
       final screen = find.byType(Member09Screen);
       expect(screen, findsOneWidget);
       expect(find.byType(Hero), findsNothing);
-      expect(
-        ModalRoute.of(tester.element(screen))!.transitionDuration,
-        Duration.zero,
-      );
+      final route = ModalRoute.of(tester.element(screen))!;
+      expect(route.transitionDuration, Duration.zero);
+      expect(route.reverseTransitionDuration, Duration.zero);
     },
   );
 

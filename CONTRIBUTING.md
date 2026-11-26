@@ -1,4 +1,4 @@
-# Contributing to NINE.
+# Contributing to IX
 
 Each member owns their own profile screen directory and matching asset directory. For member 01 these are `lib/features/members/member_01/` and `assets/members/member_01/`. The same pattern applies to members 02 through 09.
 
