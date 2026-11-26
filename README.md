@@ -88,7 +88,7 @@ Signing out removes the authenticated navigator and its route history. The nativ
 
 | Member | Contributor | Design | Owned directories |
 | --- | --- | --- | --- |
-| 01 | Pending | MONO | `lib/features/members/member_01/`, `assets/members/member_01/` |
+| 01 | Chanaka Ekanayake (23IT0475) | MONO | `lib/features/members/member_01/`, `assets/members/member_01/` |
 | 02 | Pending | TERMINAL | `lib/features/members/member_02/`, `assets/members/member_02/` |
 | 03 | Pending | AURA | `lib/features/members/member_03/`, `assets/members/member_03/` |
 | 04 | Pending | ZEN | `lib/features/members/member_04/`, `assets/members/member_04/` |
