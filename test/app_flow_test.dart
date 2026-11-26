@@ -124,6 +124,130 @@ void main() {
     expect(tester.widget<TextField>(search).controller!.text, isEmpty);
   });
 
+  testWidgets(
+    'carousel shows one member at a time and wraps in both directions',
+    (tester) async {
+      tester.view.devicePixelRatio = 1;
+      tester.view.physicalSize = const Size(390, 720);
+      addTearDown(tester.view.reset);
+      await _start(tester, signedIn: true);
+
+      final card = find.byType(MemberCard);
+      final entries = MemberRegistry.entries;
+      final next = find.byTooltip('Next member');
+      final previous = find.byTooltip('Previous member');
+
+      void expectMember(int index) {
+        expect(card, findsOneWidget);
+        expect(tester.widget<MemberCard>(card).profile, entries[index].profile);
+      }
+
+      expectMember(0);
+      await tester.tap(next);
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 150));
+      expectMember(0);
+      expect(tester.widget<MemberCard>(card).onTap, isNull);
+
+      await tester.pump(const Duration(milliseconds: 150));
+      expectMember(1);
+      final cardBox = tester.renderObject<RenderBox>(card);
+      final turningBounds = MatrixUtils.transformRect(
+        cardBox.getTransformTo(null),
+        Offset.zero & cardBox.size,
+      );
+      expect(
+        turningBounds.top,
+        greaterThan(tester.getBottomLeft(find.byType(TextField)).dy),
+      );
+      expect(turningBounds.bottom, lessThan(tester.getTopLeft(next).dy));
+
+      await tester.pumpAndSettle();
+      expectMember(1);
+
+      await tester.drag(card, const Offset(-160, 0));
+      await tester.pumpAndSettle();
+      expectMember(2);
+
+      for (var index = 3; index < entries.length; index++) {
+        await tester.tap(next);
+        await tester.pumpAndSettle();
+        expectMember(index);
+      }
+
+      await tester.tap(next);
+      await tester.pumpAndSettle();
+      expectMember(0);
+
+      await tester.tap(previous);
+      await tester.pumpAndSettle();
+      expectMember(entries.length - 1);
+
+      await tester.tap(card);
+      await tester.pumpAndSettle();
+      expect(find.byType(Member09Screen), findsOneWidget);
+      await tester.binding.handlePopRoute();
+      await tester.pumpAndSettle();
+      expectMember(entries.length - 1);
+      expect(tester.takeException(), isNull);
+    },
+  );
+
+  testWidgets(
+    'directory switches views and opens a filtered member from the list',
+    (tester) async {
+      tester.view.devicePixelRatio = 1;
+      tester.view.physicalSize = const Size(360, 720);
+      addTearDown(tester.view.reset);
+      await _start(tester, signedIn: true);
+
+      final list = find.byTooltip('List view');
+      final carousel = find.byTooltip('Carousel view');
+      final search = find.byType(TextField);
+      final entries = MemberRegistry.entries;
+
+      await tester.tap(find.byTooltip('Next member'));
+      await tester.pumpAndSettle();
+      await tester.tap(list);
+      await tester.pumpAndSettle();
+      expect(find.byType(MemberCard), findsNothing);
+      expect(find.byType(ListTile), findsNWidgets(entries.length));
+      for (final entry in entries) {
+        expect(
+          find.widgetWithText(ListTile, entry.profile.fullName),
+          findsOneWidget,
+        );
+      }
+
+      await tester.tap(carousel);
+      await tester.pumpAndSettle();
+      expect(
+        tester.widget<MemberCard>(find.byType(MemberCard)).profile,
+        entries[1].profile,
+      );
+
+      final member = entries.last.profile;
+      await tester.enterText(search, member.fullName);
+      await tester.pumpAndSettle();
+      await tester.tap(list);
+      await tester.pumpAndSettle();
+      final memberRow = find.widgetWithText(ListTile, member.fullName);
+      expect(find.byType(ListTile), findsOneWidget);
+
+      await tester.tap(memberRow);
+      await tester.pumpAndSettle();
+      expect(find.byType(Member09Screen), findsOneWidget);
+      await tester.binding.handlePopRoute();
+      await tester.pumpAndSettle();
+      expect(memberRow, findsOneWidget);
+      expect(
+        tester.widget<TextField>(search).controller!.text,
+        member.fullName,
+      );
+      expect(tester.takeException(), isNull);
+    },
+  );
+
   testWidgets('sign-in stays scrollable with a keyboard on a small display', (
     tester,
   ) async {
@@ -201,7 +325,7 @@ void main() {
   );
 
   testWidgets(
-    'reduced motion disables the portrait flight and route animation',
+    'reduced motion skips the card turn, portrait flight, and route animation',
     (tester) async {
       tester.platformDispatcher.accessibilityFeaturesTestValue =
           const FakeAccessibilityFeatures(disableAnimations: true);
@@ -209,6 +333,10 @@ void main() {
         tester.platformDispatcher.clearAccessibilityFeaturesTestValue,
       );
       await _start(tester, signedIn: true);
+      await tester.tap(find.byTooltip('Next member'));
+      await tester.pump();
+      expect(find.byKey(const ValueKey('member_02')), findsOneWidget);
+
       await tester.enterText(
         find.byType(TextField),
         MemberRegistry.entries.last.profile.fullName,

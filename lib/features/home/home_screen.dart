@@ -6,7 +6,10 @@ import '../../core/navigation/app_transitions.dart';
 import '../../core/theme/app_theme.dart';
 import '../../data/member_registry.dart';
 import '../../services/auth_service.dart';
-import '../../widgets/member_card.dart';
+import 'member_carousel.dart';
+import 'member_list.dart';
+
+enum _DirectoryView { carousel, list }
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
@@ -22,40 +25,36 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen>
-    with SingleTickerProviderStateMixin {
+class _HomeScreenState extends State<HomeScreen> {
   final _search = TextEditingController();
-  late final _entrance = AnimationController(
-    vsync: this,
-    duration: const Duration(milliseconds: 680),
-  );
   String _query = '';
+  _DirectoryView _view = _DirectoryView.carousel;
+  int _carouselIndex = 0;
+  bool _openingMember = false;
   bool _signingOut = false;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (MediaQuery.disableAnimationsOf(context)) {
-      _entrance.value = 1;
-    } else if (_entrance.isDismissed) {
-      _entrance.forward();
-    }
-  }
 
   @override
   void dispose() {
     _search.dispose();
-    _entrance.dispose();
     super.dispose();
   }
 
-  void _updateSearch(String value) => setState(() => _query = value);
+  void _updateSearch(String value) => setState(() {
+    _query = value;
+    _carouselIndex = 0;
+  });
 
   Future<void> _openMember(MemberDirectoryEntry member) async {
-    FocusScope.of(context).unfocus();
-    final route = memberProfileRoute(context, member.builder);
-    await Navigator.of(context).push(route);
-    await route.completed;
+    if (_openingMember) return;
+    _openingMember = true;
+    try {
+      FocusScope.of(context).unfocus();
+      final route = memberProfileRoute(context, member.builder);
+      await Navigator.of(context).push(route);
+      await route.completed;
+    } finally {
+      _openingMember = false;
+    }
   }
 
   Future<void> _confirmSignOut(BuildContext portalContext) async {
@@ -118,190 +117,168 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   Widget _buildDirectory(BuildContext context, BoxConstraints constraints) {
-    const gap = 16.0;
-    const maxContentWidth = 980.0;
+    const gutter = 20.0;
+    const maxContentWidth = 432.0;
     final theme = Theme.of(context);
     final colors = theme.colorScheme;
     final dark = theme.brightness == Brightness.dark;
-    final reduceMotion = MediaQuery.disableAnimationsOf(context);
     final results = MemberRegistry.search(_query);
-    final gutter = math.max(18.0, (constraints.maxWidth - maxContentWidth) / 2);
-    final width = constraints.maxWidth - 2 * gutter;
-    final columns = width >= 750 ? 3 : (width >= 260 ? 2 : 1);
-    final cardWidth = (width - (columns - 1) * gap) / columns;
-    final textScale = MediaQuery.textScalerOf(context);
-    final cardHeight = cardWidth * 0.9 + MemberCard.captionHeight(textScale);
+    final width = (constraints.maxWidth - 2 * gutter).clamp(
+      0.0,
+      maxContentWidth,
+    );
+    final cardHeight = math.min(
+      width * 1.1,
+      math.max(220.0, constraints.maxHeight - 282),
+    );
     final toolStyle = IconButton.styleFrom(
       foregroundColor: colors.primary,
       backgroundColor: colors.surfaceContainerLow.withValues(alpha: 0.76),
       side: BorderSide(color: colors.outlineVariant),
     );
 
-    return CustomScrollView(
+    return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-      slivers: [
-        SliverPadding(
-          padding: EdgeInsets.fromLTRB(gutter, 20, gutter, 22),
-          sliver: SliverToBoxAdapter(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: FittedBox(
-                        fit: BoxFit.scaleDown,
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          AppTheme.appName,
-                          style: AppTheme.wordmark.copyWith(
-                            color: colors.onSurface,
-                            fontSize: 44,
-                            letterSpacing: -3.6,
-                          ),
+      padding: const EdgeInsets.fromLTRB(gutter, 18, gutter, 18),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: maxContentWidth),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      alignment: AlignmentDirectional.centerStart,
+                      child: Text(
+                        AppTheme.appName,
+                        style: AppTheme.wordmark.copyWith(
+                          color: colors.onSurface,
+                          fontSize: 40,
+                          letterSpacing: -3,
                         ),
                       ),
                     ),
-                    IconButton.outlined(
-                      style: toolStyle,
-                      tooltip: dark ? 'Use light theme' : 'Use dark theme',
-                      onPressed: () => widget.onToggleTheme(theme.brightness),
-                      icon: Icon(
-                        dark
-                            ? Icons.light_mode_outlined
-                            : Icons.dark_mode_outlined,
-                      ),
+                  ),
+                  SegmentedButton<_DirectoryView>(
+                    style: SegmentedButton.styleFrom(
+                      foregroundColor: colors.onSurfaceVariant,
+                      selectedForegroundColor: colors.primary,
+                      selectedBackgroundColor: colors.surfaceContainerHighest,
+                      side: BorderSide(color: colors.outlineVariant),
+                      minimumSize: const Size(40, 40),
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
                     ),
-                    const SizedBox(width: 8),
-                    IconButton.outlined(
-                      style: toolStyle,
-                      tooltip: 'Sign out',
-                      onPressed: _signingOut
-                          ? null
-                          : () => _confirmSignOut(context),
-                      icon: const Icon(Icons.logout_rounded),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 30),
-                SizedBox(
-                  width: double.infinity,
-                  child: Wrap(
-                    spacing: 18,
-                    runSpacing: 6,
-                    alignment: WrapAlignment.spaceBetween,
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    children: [
-                      Semantics(
-                        header: true,
-                        child: Text(
-                          'The collective',
-                          style: theme.textTheme.headlineLarge?.copyWith(
-                            color: colors.onSurface,
-                          ),
-                        ),
+                    showSelectedIcon: false,
+                    segments: const [
+                      ButtonSegment(
+                        value: _DirectoryView.carousel,
+                        icon: Icon(Icons.view_carousel_outlined, size: 20),
+                        tooltip: 'Carousel view',
                       ),
-                      if (results.isNotEmpty)
-                        Text(
-                          results.length == 1
-                              ? '1 member'
-                              : '${results.length} members',
-                          style: theme.textTheme.labelLarge?.copyWith(
-                            color: colors.onSurfaceVariant,
-                          ),
+                      ButtonSegment(
+                        value: _DirectoryView.list,
+                        icon: Icon(
+                          Icons.format_list_bulleted_rounded,
+                          size: 20,
                         ),
+                        tooltip: 'List view',
+                      ),
                     ],
+                    selected: {_view},
+                    onSelectionChanged: (selection) =>
+                        setState(() => _view = selection.single),
                   ),
-                ),
-                const SizedBox(height: 15),
-                TextField(
-                  controller: _search,
-                  onChanged: _updateSearch,
-                  textInputAction: TextInputAction.search,
-                  decoration: InputDecoration(
-                    labelText: 'Search members',
-                    prefixIcon: const Icon(Icons.search_rounded),
-                    suffixIcon: _query.isEmpty
+                  const SizedBox(width: 12),
+                  IconButton.outlined(
+                    style: toolStyle,
+                    tooltip: dark ? 'Use light theme' : 'Use dark theme',
+                    onPressed: () => widget.onToggleTheme(theme.brightness),
+                    icon: Icon(
+                      dark
+                          ? Icons.light_mode_outlined
+                          : Icons.dark_mode_outlined,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  IconButton.outlined(
+                    style: toolStyle,
+                    tooltip: 'Sign out',
+                    onPressed: _signingOut
                         ? null
-                        : IconButton(
-                            tooltip: 'Clear search',
-                            onPressed: () {
-                              _search.clear();
-                              _updateSearch('');
-                            },
-                            icon: const Icon(Icons.close_rounded),
-                          ),
+                        : () => _confirmSignOut(context),
+                    icon: const Icon(Icons.logout_rounded),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 22),
+              Semantics(
+                header: true,
+                child: Text(
+                  'The collective',
+                  style: theme.textTheme.headlineLarge?.copyWith(
+                    color: colors.onSurface,
                   ),
                 ),
-              ],
-            ),
+              ),
+              const SizedBox(height: 12),
+              TextField(
+                controller: _search,
+                onChanged: _updateSearch,
+                textInputAction: TextInputAction.search,
+                decoration: InputDecoration(
+                  labelText: 'Search members',
+                  prefixIcon: const Icon(Icons.search_rounded),
+                  suffixIcon: _query.isEmpty
+                      ? null
+                      : IconButton(
+                          tooltip: 'Clear search',
+                          onPressed: () {
+                            _search.clear();
+                            _updateSearch('');
+                          },
+                          icon: const Icon(Icons.close_rounded),
+                        ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              if (results.isEmpty)
+                Semantics(
+                  liveRegion: true,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 24),
+                    child: Column(
+                      children: [
+                        Text(
+                          'No members found',
+                          style: theme.textTheme.titleMedium,
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          'Try a different name.',
+                          style: TextStyle(color: colors.onSurfaceVariant),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              else if (_view == _DirectoryView.carousel)
+                MemberCarousel(
+                  key: ValueKey(_query),
+                  members: results,
+                  cardHeight: cardHeight,
+                  initialIndex: _carouselIndex,
+                  onMemberChanged: (index) => _carouselIndex = index,
+                  onOpen: _openMember,
+                )
+              else
+                MemberList(members: results, onOpen: _openMember),
+            ],
           ),
         ),
-        if (results.isEmpty)
-          SliverPadding(
-            padding: EdgeInsets.fromLTRB(gutter, 34, gutter, 28),
-            sliver: SliverToBoxAdapter(
-              child: Semantics(
-                liveRegion: true,
-                child: Column(
-                  children: [
-                    Text(
-                      'No members found',
-                      style: theme.textTheme.titleMedium,
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      'Try a different name.',
-                      style: TextStyle(color: colors.onSurfaceVariant),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          )
-        else
-          SliverPadding(
-            padding: EdgeInsets.fromLTRB(gutter, 0, gutter, 30),
-            sliver: SliverGrid.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: columns,
-                crossAxisSpacing: gap,
-                mainAxisSpacing: gap,
-                mainAxisExtent: cardHeight,
-              ),
-              itemCount: results.length,
-              itemBuilder: (context, index) {
-                final member = results[index];
-                final card = MemberCard(
-                  key: ValueKey(member.profile.id),
-                  profile: member.profile,
-                  onTap: () => _openMember(member),
-                );
-                if (reduceMotion || _entrance.isCompleted) return card;
-
-                final start = index * 0.055;
-                final progress = _entrance.drive(
-                  CurveTween(
-                    curve: Interval(
-                      start,
-                      start + 0.54,
-                      curve: Curves.easeOutCubic,
-                    ),
-                  ),
-                );
-                return FadeTransition(
-                  opacity: progress,
-                  child: SlideTransition(
-                    position: progress.drive(
-                      Tween(begin: const Offset(0, 0.04), end: Offset.zero),
-                    ),
-                    child: card,
-                  ),
-                );
-              },
-            ),
-          ),
-      ],
+      ),
     );
   }
 }

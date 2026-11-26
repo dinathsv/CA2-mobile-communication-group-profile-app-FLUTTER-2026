@@ -8,7 +8,7 @@ IX is an Android member directory for the NDT Mobile Communication CA2 group ass
 
 - Flutter and null-safe Dart with Material 3 and shared light and dark themes.
 - Firebase Core and Firebase Authentication for email/password sign-in, persistent sessions, and confirmed sign-out.
-- A searchable two-column directory, nine independent profiles, and portrait transitions that respect the system's reduced-motion setting.
+- A searchable directory with carousel and list views, nine independent profiles, and portrait transitions that respect the system's reduced-motion setting.
 - A `StreamBuilder` for session changes and `setState` for the form, search, and theme.
 
 ## Local setup
@@ -39,12 +39,14 @@ flutter pub get
 4. Confirm that FlutterFire generated `lib/firebase_options.dart` and `android/app/google-services.json`. Android Gradle processes the JSON into the native resources used by `Firebase.initializeApp()`. Both generated files are local to each checkout. Assign the group leader to configure the shared project, or share the generated Android configuration privately with contributors who lack console access. [Android Firebase setup guide](https://firebase.google.com/docs/android/setup)
 5. Rebuild and sign in with the assessment account. The app displays a setup screen until valid Android Firebase configuration is present.
 
-| Assessment login | Placeholder |
-| --- | --- |
-| Email | `<assessment-email>` |
-| Password | `<share privately with the lecturer>` |
+### Assessment login
 
-Use a private GitHub repository and grant the lecturer access. Share the dedicated assessment credentials privately. Keep personal passwords, service-account credentials, and signing keys out of Git.
+| Field | Value |
+| --- | --- |
+| Email | `simple@gmail.com` |
+| Password | `simple12` |
+
+Use a private GitHub repository and grant the lecturer access. Keep personal passwords, service-account credentials, and signing keys out of Git.
 
 ## Run, test, and build
 

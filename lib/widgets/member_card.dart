@@ -3,208 +3,147 @@ import 'package:flutter/material.dart';
 import '../models/member_profile.dart';
 import 'member_photo.dart';
 
-class MemberCard extends StatefulWidget {
-  const MemberCard({super.key, required this.profile, required this.onTap});
+class MemberCard extends StatelessWidget {
+  const MemberCard({
+    super.key,
+    required this.profile,
+    required this.minimumHeight,
+    required this.onTap,
+  });
 
   final MemberProfile profile;
-  final Future<void> Function() onTap;
-
-  static double captionHeight(TextScaler scale) =>
-      27 + 3 * scale.scale(16) + (4 / 3) * scale.scale(12);
-
-  @override
-  State<MemberCard> createState() => _MemberCardState();
-}
-
-class _MemberCardState extends State<MemberCard> {
-  Offset _tilt = Offset.zero;
-  bool _pressed = false;
-  bool _opening = false;
-
-  void _updateTilt(Offset position) {
-    final size = context.size;
-    if (_opening || size == null || size.isEmpty) return;
-
-    setState(() {
-      _tilt = Offset(
-        (2 * position.dx / size.width - 1).clamp(-1.0, 1.0),
-        (2 * position.dy / size.height - 1).clamp(-1.0, 1.0),
-      );
-    });
-  }
-
-  Future<void> _openProfile() async {
-    if (_opening) return;
-
-    setState(() {
-      _opening = true;
-      _pressed = false;
-      _tilt = Offset.zero;
-    });
-
-    // The portrait needs an axis-aligned source and destination for the Hero.
-    if (!MediaQuery.disableAnimationsOf(context)) {
-      await WidgetsBinding.instance.endOfFrame;
-      if (!mounted) return;
-    }
-
-    try {
-      await widget.onTap();
-    } finally {
-      if (mounted) setState(() => _opening = false);
-    }
-  }
+  final double minimumHeight;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colors = theme.colorScheme;
     final dark = theme.brightness == Brightness.dark;
-    final profile = widget.profile;
-    final animate = !MediaQuery.disableAnimationsOf(context) && !_opening;
-    final duration = animate
-        ? const Duration(milliseconds: 150)
-        : Duration.zero;
-    final shape = RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(20),
-      side: BorderSide(color: colors.outlineVariant),
-    );
 
-    return MouseRegion(
-      onHover: animate ? (event) => _updateTilt(event.localPosition) : null,
-      onExit: (_) => setState(() => _tilt = Offset.zero),
-      child: TweenAnimationBuilder<Offset>(
-        tween: Tween(end: animate ? _tilt : Offset.zero),
-        duration: duration,
-        curve: Curves.easeOutCubic,
-        builder: (context, tilt, child) => Transform(
-          alignment: Alignment.center,
-          transformHitTests: false,
-          transform: Matrix4.identity()
-            ..setEntry(3, 2, 0.0016)
-            ..rotateX(animate ? -tilt.dy * 0.11 : 0)
-            ..rotateY(animate ? tilt.dx * 0.11 : 0),
-          child: child,
-        ),
-        child: AnimatedScale(
-          scale: _pressed && animate ? 0.974 : 1,
-          duration: duration,
-          curve: Curves.easeOutCubic,
-          child: Semantics(
-            button: true,
-            label:
-                '${profile.fullName}, member ${profile.number}, ${profile.designName}',
-            onTap: _openProfile,
-            child: ExcludeSemantics(
-              child: Material(
-                color: colors.surfaceContainerLow,
-                shape: shape,
-                elevation: 4,
-                shadowColor: dark
-                    ? Colors.black54
-                    : colors.primary.withValues(alpha: 0.24),
-                surfaceTintColor: Colors.transparent,
-                clipBehavior: Clip.antiAlias,
-                child: InkWell(
-                  onTap: _openProfile,
-                  onHighlightChanged: animate
-                      ? (value) => setState(() => _pressed = value)
-                      : null,
-                  child: _MemberCardBody(profile: profile),
+    return Semantics(
+      button: true,
+      enabled: onTap != null,
+      label: 'View profile for ${profile.fullName}',
+      onTap: onTap,
+      child: ExcludeSemantics(
+        child: Material(
+          color: colors.surfaceContainerHighest,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(28),
+            side: BorderSide(color: colors.outlineVariant),
+          ),
+          elevation: 8,
+          shadowColor: dark
+              ? Colors.black54
+              : colors.primary.withValues(alpha: 0.2),
+          surfaceTintColor: Colors.transparent,
+          clipBehavior: Clip.antiAlias,
+          child: Stack(
+            fit: StackFit.passthrough,
+            children: [
+              Positioned.fill(child: MemberPhoto(profile: profile)),
+              ConstrainedBox(
+                constraints: BoxConstraints(minHeight: minimumHeight),
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: _buildCaption(theme.textTheme, colors),
                 ),
               ),
-            ),
+              Positioned.fill(
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: onTap,
+                    hoverColor: const Color(0x0fffffff),
+                    focusColor: const Color(0x28ffffff),
+                    highlightColor: const Color(0x16ffffff),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),
     );
   }
-}
 
-class _MemberCardBody extends StatelessWidget {
-  const _MemberCardBody({required this.profile});
-
-  final MemberProfile profile;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colors = theme.colorScheme;
-    final dark = theme.brightness == Brightness.dark;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+  Widget _buildCaption(TextTheme textTheme, ColorScheme colors) {
+    const fadeHeight = 76.0;
+    return Stack(
+      clipBehavior: Clip.none,
       children: [
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(7, 7, 7, 0),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(14),
-              child: DecoratedBox(
-                position: DecorationPosition.foreground,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      colors.primary.withValues(alpha: dark ? 0.24 : 0.09),
-                      colors.surfaceContainerHighest.withValues(
-                        alpha: dark ? 0.30 : 0.09,
-                      ),
-                      (dark ? colors.surface : colors.primary).withValues(
-                        alpha: dark ? 0.42 : 0.14,
-                      ),
-                    ],
-                  ),
-                  border: Border.all(
-                    color: colors.primary.withValues(alpha: 0.16),
-                  ),
-                  borderRadius: BorderRadius.circular(14),
+        Positioned(
+          left: 0,
+          right: 0,
+          top: -fadeHeight,
+          bottom: 0,
+          child: LayoutBuilder(
+            builder: (context, constraints) => DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  stops: [0, fadeHeight / constraints.maxHeight, 1],
+                  colors: const [
+                    Colors.transparent,
+                    Color(0xc40c0a14),
+                    Color(0xfa0c0a14),
+                  ],
                 ),
-                child: MemberPhoto(profile: profile),
               ),
             ),
           ),
         ),
-        Container(
-          constraints: BoxConstraints(
-            minHeight: MemberCard.captionHeight(
-              MediaQuery.textScalerOf(context),
-            ),
-          ),
-          alignment: Alignment.center,
-          padding: const EdgeInsets.fromLTRB(13, 11, 13, 12),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(20, 6, 20, 20),
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Expanded(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      profile.fullName,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: theme.textTheme.titleMedium,
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      '${profile.number} · ${profile.designName}',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: theme.textTheme.labelMedium?.copyWith(
-                        color: colors.onSurfaceVariant,
-                        letterSpacing: 0.35,
+                child: LayoutBuilder(
+                  builder: (context, constraints) => Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        profile.designName,
+                        style: textTheme.labelMedium?.copyWith(
+                          color: const Color(0xffe5dbff),
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 1.8,
+                        ),
                       ),
-                    ),
-                  ],
+                      const SizedBox(height: 6),
+                      Text(
+                        profile.fullName,
+                        style: textTheme.headlineSmall?.copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w800,
+                          fontSize: (constraints.maxWidth / 8).clamp(
+                            20.0,
+                            28.0,
+                          ),
+                          height: 1.07,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              const SizedBox(width: 6),
-              Icon(
-                Icons.arrow_outward_rounded,
-                size: 17,
-                color: colors.primary,
+              const SizedBox(width: 12),
+              DecoratedBox(
+                decoration: BoxDecoration(
+                  color: colors.primary,
+                  shape: BoxShape.circle,
+                ),
+                child: SizedBox.square(
+                  dimension: 46,
+                  child: Icon(
+                    Icons.arrow_outward_rounded,
+                    color: colors.onPrimary,
+                    size: 22,
+                  ),
+                ),
               ),
             ],
           ),
