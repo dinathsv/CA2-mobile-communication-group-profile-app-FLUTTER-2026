@@ -86,17 +86,17 @@ Signing out removes the authenticated navigator and its route history. The nativ
 
 ## Member contributions
 
-| Member | Contributor | Design | Owned directories |
-| --- | --- | --- | --- |
-| 01 | Chanaka Ekanayake (23IT0475) | MONO | `lib/features/members/member_01/`, `assets/members/member_01/` |
-| 02 | Pending | TERMINAL | `lib/features/members/member_02/`, `assets/members/member_02/` |
-| 03 | Pending | AURA | `lib/features/members/member_03/`, `assets/members/member_03/` |
-| 04 | Pending | ZEN | `lib/features/members/member_04/`, `assets/members/member_04/` |
-| 05 | Pending | BENTO | `lib/features/members/member_05/`, `assets/members/member_05/` |
-| 06 | Pending | VOGUE | `lib/features/members/member_06/`, `assets/members/member_06/` |
-| 07 | Pending | PULSE | `lib/features/members/member_07/`, `assets/members/member_07/` |
-| 08 | Pending | BRUTAL | `lib/features/members/member_08/`, `assets/members/member_08/` |
-| 09 | Pending | CINEMA | `lib/features/members/member_09/`, `assets/members/member_09/` |
+| Member | Portrait | Name | Student ID | Design | Owned directories |
+| :---: | :---: | --- | --- | --- | --- |
+| 01 | <img src="assets/members/member_01/portrait.png" alt="Portrait of Chanaka Ekanayake" width="64"> | Chanaka Ekanayake | 23IT0475 | MONO | [Profile](lib/features/members/member_01/) · [Assets](assets/members/member_01/) |
+| 02 | <img src="assets/members/member_02/portrait.png" alt="Portrait of Hamas Akram" width="64"> | Hamas Akram | 23IT0479 | TERMINAL | [Profile](lib/features/members/member_02/) · [Assets](assets/members/member_02/) |
+| 03 | <img src="assets/members/member_03/portrait.jpeg" alt="Portrait of S Dinath" width="64"> | S Dinath | 23IT0471 | AURA | [Profile](lib/features/members/member_03/) · [Assets](assets/members/member_03/) |
+| 04 | <img src="assets/members/member_04/portrait.png" alt="Portrait of Umindu Dinal" width="64"> | Umindu Dinal | 23IT0470 | ZEN | [Profile](lib/features/members/member_04/) · [Assets](assets/members/member_04/) |
+| 05 | <img src="assets/members/member_05/portrait.png" alt="Portrait of EDIRISINGHE ARACHCHILAGE SACHINI JINATHMA EDIRISINGHE" width="64"> | EDIRISINGHE ARACHCHILAGE SACHINI JINATHMA EDIRISINGHE | 23IT0474 | BENTO | [Profile](lib/features/members/member_05/) · [Assets](assets/members/member_05/) |
+| 06 | <img src="assets/members/member_06/portrait.png" alt="Portrait of Ravindi Ranthilini" width="64"> | Ravindi Ranthilini | 23IT0476 | VOGUE | [Profile](lib/features/members/member_06/) · [Assets](assets/members/member_06/) |
+| 07 | <img src="assets/members/member_07/portrait.png" alt="Placeholder portrait for Member 07" width="64"> | Pending | Pending | PULSE | [Profile](lib/features/members/member_07/) · [Assets](assets/members/member_07/) |
+| 08 | <img src="assets/members/member_08/portrait.png" alt="Placeholder portrait for Member 08" width="64"> | Pending | Pending | BRUTAL | [Profile](lib/features/members/member_08/) · [Assets](assets/members/member_08/) |
+| 09 | <img src="assets/members/member_09/portrait.png" alt="Portrait of D.M.S.A.K. Dissanayaka" width="64"> | D.M.S.A.K. Dissanayaka | 23IT0472 | CINEMA | [Profile](lib/features/members/member_09/) · [Assets](assets/members/member_09/) |
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for the member contract and Git workflow.
 
