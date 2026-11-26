@@ -5,14 +5,31 @@ import '../../../widgets/member_photo.dart';
 
 final member01Profile = MemberProfile(
   id: 'member_01',
-  fullName: 'Placeholder Member 01',
-  studentId: 'Student ID pending',
-  address: 'Address pending',
-  email: 'Email pending',
+  fullName: 'Chanaka Ekanayake',
+  studentId: '23IT0475',
+  address: 'Colombo, Sri Lanka',
+  email: 'chanakapekanayake@gmail.com',
   photoAsset: 'assets/members/member_01/portrait.png',
-  qualifications: const ['Qualifications pending'],
-  softSkills: const ['Soft skills pending'],
-  specialTalents: const ['Special talents pending'],
+  qualifications: const [
+    'National Diploma in Information Technology, Institute of Technology, University of Moratuwa (ITUM), 2025–Present | CGPA: 3.26',
+    'G.C.E. Advanced Level, St. Thomas’ College, Matale',
+    'From Relational Model (SQL) to MongoDB’s Document Model, MongoDB (Credly)',
+    'Getting Started with Docker, Simplilearn SkillUp',
+  ],
+  softSkills: const [
+    'Java 17 · Python · JavaScript (ES6+) · SQL',
+    'Spring Boot 3 · Spring Data JPA · Hibernate · REST APIs · DTOs',
+    'React · Node.js/Express · responsive layouts · form validation',
+    'MySQL · MongoDB · H2 · relational database design',
+    'scikit-learn · pandas · NumPy · Random Forest · clustering',
+    'Postman · Git · GitHub Actions · Docker · Docker Compose · Maven · npm',
+  ],
+  specialTalents: const [
+    'AI-Powered Smart Surplus Food Redistribution System — built REST APIs and React interfaces for food listings, reservations, ticketing, and notifications; added CSV bulk uploads and threshold-based food categorization.',
+    'Blog Management System — delivered 18 REST endpoints across 4 resources using Spring Boot, layered architecture, DTOs, validation, exception handling, and pagination.',
+    'Machine Learning Labs — trained a Random Forest on 289 patient records (84.5% test accuracy, approximately 0.84 F1); applied Ward hierarchical clustering and K-Means to customer segmentation.',
+    'Watchmark TV Series Tracker — integrated TMDB metadata and configured GitHub Actions CI, Dependabot, and Docker Compose.',
+  ],
   designName: 'MONO',
 );
 
@@ -207,8 +224,15 @@ class _Member01ScreenState extends State<Member01Screen>
         _sectionHeading('01', 'DETAILS'),
         const SizedBox(height: 25),
         _detailLine('ADDRESS', profile.address),
+        _detailLine('PHONE', '+94 77 402 2312'),
         _detailLine('EMAIL', profile.email),
         _detailLine('STUDENT ID', profile.studentId),
+        _detailLine('LINKEDIN', 'linkedin.com/in/chanaka-ekanayake'),
+        _detailLine('GITHUB', 'github.com/Chanaka02'),
+        _detailLine(
+          'SUMMARY',
+          'IT undergraduate at ITUM (CGPA: 3.26) with hands-on experience in Java, Spring Boot, React, and MySQL. Familiar with Spec-Driven Development (SDD), RESTful API design, layered architecture, and Docker; seeking a software engineering internship.',
+        ),
       ],
     );
   }
@@ -304,7 +328,7 @@ class _Member01ScreenState extends State<Member01Screen>
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        _sectionHeading('03', 'SOFT SKILLS'),
+        _sectionHeading('03', 'TECHNICAL SKILLS'),
         const SizedBox(height: 25),
         Wrap(
           spacing: 8,
@@ -343,7 +367,7 @@ class _Member01ScreenState extends State<Member01Screen>
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        _sectionHeading('04', 'SPECIAL TALENTS'),
+        _sectionHeading('04', 'PROJECT HIGHLIGHTS'),
         const SizedBox(height: 18),
         for (var index = 0; index < profile.specialTalents.length; index++)
           _talentLine(index + 1, profile.specialTalents[index]),
